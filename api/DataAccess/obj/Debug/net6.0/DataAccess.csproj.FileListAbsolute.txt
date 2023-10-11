@@ -1,0 +1,15 @@
+C:\Users\Pedro Silva\source\repos\api\DataAccess\bin\Debug\net6.0\DataAccess.deps.json
+C:\Users\Pedro Silva\source\repos\api\DataAccess\bin\Debug\net6.0\DataAccess.dll
+C:\Users\Pedro Silva\source\repos\api\DataAccess\bin\Debug\net6.0\DataAccess.pdb
+C:\Users\Pedro Silva\source\repos\api\DataAccess\bin\Debug\net6.0\Data.dll
+C:\Users\Pedro Silva\source\repos\api\DataAccess\bin\Debug\net6.0\Data.pdb
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.AssemblyInfoInputs.cache
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.AssemblyInfo.cs
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.csproj.CopyComplete
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.dll
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\refint\DataAccess.dll
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\DataAccess.pdb
+C:\Users\Pedro Silva\source\repos\api\DataAccess\obj\Debug\net6.0\ref\DataAccess.dll
