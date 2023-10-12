@@ -8,10 +8,11 @@ namespace api.Controllers
     public class UserController : Controller
     {
         private readonly IGenericBusinessObject _genericBusinessObject;
-
-        public UserController(IGenericBusinessObject genericBusinessObject)
+        private readonly IUserBusinessObject _userBusinessObject;
+        public UserController(IGenericBusinessObject genericBusinessObject, IUserBusinessObject userBusinessObject)
         {
             _genericBusinessObject = genericBusinessObject;
+            _userBusinessObject = userBusinessObject;
         }
 
         [HttpGet("get")]
@@ -40,6 +41,12 @@ namespace api.Controllers
         {
             var result = _genericBusinessObject.InsertAsync<User>(user.ToUser());
             return Ok("Created");
+        }
+        [HttpPut("update")]
+        public async Task<ActionResult> Update(Guid uuid, [FromBody] UserRequest user)
+        {
+            var result = await _userBusinessObject.Update(uuid,user.ToUser();
+            return Ok("Updated");
         }
     }   
 }

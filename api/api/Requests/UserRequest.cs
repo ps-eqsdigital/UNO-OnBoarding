@@ -1,4 +1,4 @@
-﻿using Data.Entities;
+﻿    using Data.Entities;
 
 namespace api.Requests
 {
@@ -13,7 +13,7 @@ namespace api.Requests
 
         public User ToUser()
         {
-            return new User { Name = this.Name, Email = this.Email, Password = this.Password, Picture = this.Picture, Role = this.Role, Uuid = new Guid(), Phone= this.Phone };
+            return new User { Name = this.Name, Email = this.Email, Password = this.Password, Picture = this.Picture, Role = this.Role, Uuid = Guid.NewGuid(), Phone= this.Phone };
         }
     }
 }
