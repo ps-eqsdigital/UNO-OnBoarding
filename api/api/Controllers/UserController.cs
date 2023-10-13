@@ -45,8 +45,8 @@ namespace api.Controllers
         [HttpPut("update")]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] UserRequest user)
         {
-            var result = await _userBusinessObject.Update(uuid,user.ToUser();
-            return Ok("Updated");
+            var result = await _userBusinessObject.Update(uuid,user.ToUser());
+            return Ok("Updated user");
         }
     }   
 }
