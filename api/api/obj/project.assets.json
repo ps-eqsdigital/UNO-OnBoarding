@@ -46,6 +46,22 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "type": "package",
         "compile": {
@@ -1055,7 +1071,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "DataAccess": "1.0.0"
+          "DataAccess": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0"
         },
         "compile": {
           "bin/placeholder/Business.dll": {}
@@ -1068,6 +1085,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0",
           "Microsoft.EntityFrameworkCore": "7.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.12"
         },
@@ -1082,7 +1100,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "Data": "1.0.0"
+          "Data": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0"
         },
         "compile": {
           "bin/placeholder/DataAccess.dll": {}
@@ -1130,6 +1149,29 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+      "sha512": "UX8w9BlCiZpr6Ox4YAve1w0CkI1CAovukGNzKd7v0+5pZc8lzuG5tRovucr1RWIKHs0E/Yx8563CN7KzaB3bpw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.mvc.versioning/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "icon.png",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512",
+        "microsoft.aspnetcore.mvc.versioning.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
@@ -3099,6 +3141,7 @@
       "Business >= 1.0.0",
       "Data >= 1.0.0",
       "DataAccess >= 1.0.0",
+      "Microsoft.AspNetCore.Mvc.Versioning >= 5.1.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.12",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
@@ -3110,11 +3153,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\api\\api.csproj",
+      "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\api\\api.csproj",
       "packagesPath": "C:\\Users\\Pedro Silva\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\api\\obj\\",
+      "outputPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3135,14 +3178,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj": {
-              "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj"
+            "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj": {
+              "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj"
             },
-            "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj"
+            "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj"
             },
-            "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj": {
-              "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj"
+            "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj": {
+              "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj"
             }
           }
         }
@@ -3157,6 +3200,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Versioning": {
+            "target": "Package",
+            "version": "[5.1.0, )"
+          },
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
             "version": "[7.0.12, )"
