@@ -2627,11 +2627,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj",
+      "projectUniqueName": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj",
       "projectName": "Data",
-      "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj",
+      "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj",
       "packagesPath": "C:\\Users\\Pedro Silva\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\obj\\",
+      "outputPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
