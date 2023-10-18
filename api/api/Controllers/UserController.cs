@@ -32,20 +32,24 @@ namespace api.Controllers
         [HttpDelete("delete/{uuid}")]
         public async Task<ActionResult> DeleteUser(Guid uuid)
         {
-            var result = _genericBusinessObject.RemoveAsync<User>(uuid);
+            await _genericBusinessObject.RemoveAsync<User>(uuid);
             return Ok("Deleted");
         }
 
         [HttpPost("insert")]
-        public async Task<ActionResult<User>> InsertUser([FromBody] UserRequest user)
+        public async Task<ActionResult<Guid>> InsertUser([FromBody] UserRequest user)
         {
-            var result = _genericBusinessObject.InsertAsync<User>(user.ToUser());
-            return Ok("Created");
+            var result = await _userBusinessObject.Insert(user.ToUser());
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
         }
         [HttpPut("update")]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] UserRequest user)
         {
-            var result = await _userBusinessObject.Update(uuid,user.ToUser());
+            await _userBusinessObject.Update(uuid,user.ToUser());
             return Ok("Updated user");
         }
     }   

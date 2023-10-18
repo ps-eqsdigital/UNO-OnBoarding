@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj": {}
+    "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj": {
+    "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj",
+        "projectUniqueName": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj",
         "projectName": "Business",
-        "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\Business.csproj",
+        "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\Business.csproj",
         "packagesPath": "C:\\Users\\Pedro Silva\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Business\\obj\\",
+        "outputPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj": {
-                "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj"
+              "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj": {
+                "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj"
               }
             }
           }
@@ -67,14 +67,14 @@
         }
       }
     },
-    "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj": {
+    "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\DataAccess.csproj",
+        "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\DataAccess.csproj",
         "packagesPath": "C:\\Users\\Pedro Silva\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\DataAccess\\obj\\",
+        "outputPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -95,8 +95,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj"
+              "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj"
               }
             }
           }
@@ -130,14 +130,14 @@
         }
       }
     },
-    "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj": {
+    "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj",
+        "projectPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\Pedro Silva\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\obj\\",
+        "outputPath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

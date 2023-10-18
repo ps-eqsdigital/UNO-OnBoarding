@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mHsj/DX3Co18lx6ekIDKQJEOIY7FcMMM/46HmZfMdU91bDj+31okJ20aHopAWm5eZsd6Pvg6KNkSF1xIdaUQlw==",
+  "dgSpecHash": "Fvo3B4S/NGwt1SmwNK2FB+WjXFOyDofF0iA2q4jm0cqPJNX8IaapcM4nttZ0ijoPKoe+faOrH7W4Jjp5zVw9Ew==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pedro Silva\\UNO-OnBoarding\\api\\Data\\Data.csproj",
+  "projectFilePath": "C:\\Users\\Pedro Silva\\Source\\Repos\\UNOOnBoarding\\api\\Data\\Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pedro Silva\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Pedro Silva\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
