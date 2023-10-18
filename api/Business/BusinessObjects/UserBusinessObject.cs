@@ -12,6 +12,8 @@ using System.Net.Mail;
 using Business.BusinessModels;
 using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.Extensions.Configuration;
 
 namespace Business.BusinessObjects
 {
@@ -56,6 +58,7 @@ namespace Business.BusinessObjects
                 }
                 string password = GenerateRandomPassword();
                 record.Password = password;
+                Console.WriteLine("here");
                 sendEmail(record.Email!, password);
 
                 await _genericDataAccessObject.InsertAsync<User>(record);
@@ -85,21 +88,38 @@ namespace Business.BusinessObjects
             return passwordBuilder.ToString();
         }
 
-        private void sendEmail(string email, string password) {
+        private void sendEmail(string email, string password)
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            var smtpServer = configuration["SmtpConfig:SmtpServer"];
+            var smtpPortString = configuration["SmtpConfig:SmtpPort"];
+            var smtpUsername = configuration["SmtpConfig:SmtpUsername"];
+            var smtpPassword = configuration["SmtpConfig:SmtpPassword"];
+            int smtpPort = int.Parse(smtpPortString);
+
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress("unoonboarding@sapo.pt");
             mail.To.Add(email);
             mail.Subject = "User password";
             mail.Body = "Your password is " + password;
 
-           
-            // Create a SMTP client and send the email
-            SmtpClient smtpClient = new SmtpClient("smtp.sapo.pt");
-            smtpClient.Port = 587;
-            smtpClient.Credentials = new NetworkCredential("unoonboarding@sapo.pt", "Eqs_2023");
+            SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
             smtpClient.EnableSsl = true;
 
-            smtpClient.Send(mail);
+            try
+            {
+                smtpClient.Send(mail);
+                Console.WriteLine("Email sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error sending email: " + ex.Message);
+            }
         }
         static bool IsValidEmail(string email)
         {
