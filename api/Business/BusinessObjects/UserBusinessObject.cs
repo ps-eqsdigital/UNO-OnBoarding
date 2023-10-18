@@ -52,13 +52,12 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                if (!IsValidEmail(record.Email!) | record.Name.IsNullOrEmpty() | record.Picture.IsNullOrEmpty() | record.Phone.IsNullOrEmpty())
+                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
                 {
                     throw new Exception();
                 }
                 string password = GenerateRandomPassword();
                 record.Password = password;
-                Console.WriteLine("here");
                 sendEmail(record.Email!, password);
 
                 await _genericDataAccessObject.InsertAsync<User>(record);
