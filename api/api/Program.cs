@@ -7,6 +7,7 @@ using Business.Base;
 using Business.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Business.BusinessObjects;
+using DataAccess.DataAccessObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<UnoOnBoardingContext>(options =>
 builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
-
+builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
 var app = builder.Build();
 
 var serviceScopeFactory = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory));

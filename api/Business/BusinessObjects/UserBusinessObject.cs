@@ -20,9 +20,11 @@ namespace Business.BusinessObjects
     public class UserBusinessObject : AbstractBusinessObject, IUserBusinessObject
     {
         private readonly IGenericDataAccessObject _genericDataAccessObject;
-
-        public UserBusinessObject(IGenericDataAccessObject genericDataAccessObject) {
+        private readonly IUserDataAccessObject _userDataAccessObject;
+        public UserBusinessObject(IGenericDataAccessObject genericDataAccessObject, IUserDataAccessObject userDataAccessObject)
+        {
             _genericDataAccessObject = genericDataAccessObject;
+            _userDataAccessObject = userDataAccessObject;
         }
 
         public async Task<OperationResult> Update(Guid uuid, User record)
@@ -48,6 +50,20 @@ namespace Business.BusinessObjects
             });
         }
 
+        public async Task<OperationResult<List<User>>> ListFilteredUsers(string search, int sort)
+        {
+            return await ExecuteOperation(async () => {
+
+                if (sort !=0 && sort != 1)
+                {
+                    Console.WriteLine("ex");
+                    throw new Exception();
+                }
+                var result =await _userDataAccessObject.FilterUsers(search,sort);
+                return result;
+
+            });
+        }
         public async Task<OperationResult<CreateUserBusinessModel>> Insert(User record)
         {
             return await ExecuteOperation(async () =>
