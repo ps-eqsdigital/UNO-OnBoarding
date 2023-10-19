@@ -37,7 +37,7 @@ namespace api.Controllers
         }
 
         [HttpPost("insert")]
-        public async Task<ActionResult<Guid>> InsertUser([FromBody] UserRequest user)
+        public async Task<ActionResult<Guid>> InsertUser([FromBody] CreateUserRequest user)
         {
             var result = await _userBusinessObject.Insert(user.ToUser());
             if (result.Exception is Exception)
@@ -47,10 +47,14 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpPut("update")]
-        public async Task<ActionResult> Update(Guid uuid, [FromBody] UserRequest user)
+        public async Task<ActionResult> Update(Guid uuid, [FromBody] UserUpdateRequest user)
         {
-            await _userBusinessObject.Update(uuid,user.ToUser());
-            return Ok("Updated user");
+            var result = await _userBusinessObject.Update(uuid, user.ToUser());
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return StatusCode(200);
         }
     }   
 }

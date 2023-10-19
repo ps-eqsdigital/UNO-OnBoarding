@@ -1,0 +1,19 @@
+﻿using Data.Entities;
+
+namespace api.Requests
+{
+    public class UserUpdateRequest
+    {
+        public string? Name { get; set; }
+        public string? Password { get; set; }
+        public string? Email { get; set; }
+        public string? Picture { get; set; }
+        public string? Phone { get; set; }
+        public Role Role { get; set; }
+
+        public User ToUser()
+        {
+            return new User { Name = this.Name, Email = this.Email, Picture = this.Picture, Role = this.Role, Uuid = Guid.NewGuid(), Phone = this.Phone, Password= this.Password };
+        }
+    }
+}
