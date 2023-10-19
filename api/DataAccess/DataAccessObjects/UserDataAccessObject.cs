@@ -23,7 +23,7 @@ namespace DataAccess.DataAccessObjects
         {
             if (sort == 0)
             {
-                var result = await _context.Set<User>()
+                List<User> result = await _context.Set<User>()
                 .Where(x => (x.Name!.ToLower().Contains(search.ToLower())) ||
                             (x.Email!.ToLower().Contains(search.ToLower())))
                 .OrderBy(x => x.Name).ToListAsync();
@@ -33,7 +33,7 @@ namespace DataAccess.DataAccessObjects
 
             else
             {
-                var result = await _context.Set<User>()
+                List<User> result = await _context.Set<User>()
                 .Where(x => (x.Name!.ToLower().Contains(search.ToLower())) ||
                             (x.Email!.ToLower().Contains(search.ToLower())))
                 .OrderByDescending(x => x.Name).ToListAsync();

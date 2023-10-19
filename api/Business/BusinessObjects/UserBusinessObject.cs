@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace Business.BusinessObjects
 {
@@ -58,7 +59,7 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception();
                 }
-                var result =await _userDataAccessObject.FilterUsers(search,sort);
+                List<User> result =await _userDataAccessObject.FilterUsers(search,sort);
                 return result;
 
             });
@@ -142,5 +143,6 @@ namespace Business.BusinessObjects
 
             return regex.IsMatch(email);
         }
+
     }
 }
