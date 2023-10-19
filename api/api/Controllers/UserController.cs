@@ -1,4 +1,5 @@
 ﻿using api.Requests;
+using Business.Base;
 using Business.Interfaces;
 using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace api.Controllers
         [HttpPut("update")]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] UserUpdateRequest user)
         {
-            var result = await _userBusinessObject.Update(uuid, user.ToUser());
+            OperationResult result = await _userBusinessObject.Update(uuid, user.ToUser());
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
