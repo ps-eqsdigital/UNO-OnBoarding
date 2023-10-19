@@ -56,7 +56,6 @@ namespace Business.BusinessObjects
 
                 if (sort !=0 && sort != 1)
                 {
-                    Console.WriteLine("ex");
                     throw new Exception();
                 }
                 var result =await _userDataAccessObject.FilterUsers(search,sort);
