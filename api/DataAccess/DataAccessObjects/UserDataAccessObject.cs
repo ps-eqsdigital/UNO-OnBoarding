@@ -1,9 +1,11 @@
 ﻿using Data.Context;
 using Data.Entities;
+using DataAccess.ExtensionMethods;
 using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,7 @@ namespace DataAccess.DataAccessObjects
 
         public async Task<List<User>> FilterUsers(string search,int sort)
         {
+            search = search.RemoveDiacritics();
             if (sort == 0)
             {
                 List<User> result = await _context.Set<User>()
@@ -34,11 +37,11 @@ namespace DataAccess.DataAccessObjects
             else
             {
                 List<User> result = await _context.Set<User>()
-                .Where(x => (x.Name!.ToLower().Contains(search.ToLower())) ||
-                            (x.Email!.ToLower().Contains(search.ToLower())))
-                .OrderByDescending(x => x.Name).ToListAsync();
+                 .Where(x => (x.Name!.ToLower().Contains(search.ToLower())) ||
+                             (x.Email!.ToLower().Contains(search.ToLower())))
+                 .OrderByDescending(x => x.Name).ToListAsync();
 
-            return result.Where(x => !x.IsDeleted).ToList();
+                return result.Where(x => !x.IsDeleted).ToList(); ;
             }
         }
 
