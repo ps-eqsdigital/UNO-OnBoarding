@@ -1,16 +1,16 @@
-/* user.component.css */
+
 .app-user {
-    background-color: #f0f8ff; /* Light blue background color */
+    background-color: #f0f8ff; 
     padding: 20px;
-    border-radius: 10px; /* Increased border radius for a softer look */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Enhanced box shadow for depth */
-    text-align: center; /* Center content */
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
   }
   
   .app-user h2 {
-    color: #007BFF; /* A deeper blue for the heading */
-    font-size: 24px; /* Larger font size */
-    margin-bottom: 20px; /* Increased spacing below the heading */
+    color: #007BFF; 
+    font-size: 24px; 
+    margin-bottom: 20px; 
   }
   
   .app-user ul {
@@ -19,18 +19,18 @@
   }
   
   .app-user li {
-    background-color: #E6F7FF; /* A slightly lighter blue background for list items */
+    background-color: #E6F7FF;
     padding: 12px;
     margin: 10px 0;
-    border-radius: 8px; /* Increased border radius for a more rounded appearance */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for individual list items */
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   }
   
   .app-user input {
     padding: 8px;
-    border: 2px solid #007BFF; /* A border around the input */
+    border: 2px solid #007BFF; 
     border-radius: 8px;
     font-size: 16px;
-    margin-bottom: 10px; /* Spacing below the input */
+    margin-bottom: 10px;
   }
   
