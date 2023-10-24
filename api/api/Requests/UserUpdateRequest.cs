@@ -2,6 +2,9 @@
 
 namespace api.Requests
 {
+    /// <summary>
+    /// what will be request when updating a user 
+    /// </summary>
     public class UserUpdateRequest
     {
         public string? Name { get; set; }

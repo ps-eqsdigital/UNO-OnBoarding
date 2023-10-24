@@ -35,6 +35,10 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception("user does not exist");
                 }
+                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
+                {
+                    throw new Exception();
+                }
                 else
                 {
                     user.Name = record.Name;
