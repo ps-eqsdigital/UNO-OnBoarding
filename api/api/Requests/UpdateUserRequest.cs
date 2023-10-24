@@ -5,7 +5,7 @@ namespace api.Requests
     /// <summary>
     /// what will be request when updating a user 
     /// </summary>
-    public class UserUpdateRequest
+    public class UpdateUserRequest
     {
         public string? Name { get; set; }
         public string? Password { get; set; }

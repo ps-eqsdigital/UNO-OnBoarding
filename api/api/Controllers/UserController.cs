@@ -19,15 +19,14 @@ namespace api.Controllers
         [HttpGet("get")]
         public async Task<ActionResult<List<User>>> ListUsers()
         {
-            var result = await _genericBusinessObject.ListAsync<User>();
+            List<User> result = await _genericBusinessObject.ListAsync<User>();
             return result;
         }
 
         [HttpGet("get/{uuid}")]
         public async Task<ActionResult<User>> GetUserByUuid(Guid uuid)
         {
-            var result = await _genericBusinessObject.GetAsync<User>(uuid);
-            return result;
+            return await _genericBusinessObject.GetAsync<User>(uuid);
         }
 
         [HttpDelete("delete/{uuid}")]
@@ -40,7 +39,7 @@ namespace api.Controllers
         [HttpPost("insert")]
         public async Task<ActionResult<Guid>> InsertUser([FromBody] CreateUserRequest user)
         {
-            var result = await _userBusinessObject.Insert(user.ToUser());
+            OperationResult result = await _userBusinessObject.Insert(user.ToUser());
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
@@ -48,7 +47,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpPut("update")]
-        public async Task<ActionResult> Update(Guid uuid, [FromBody] UserUpdateRequest user)
+        public async Task<ActionResult> Update(Guid uuid, [FromBody] UpdateUserRequest user)
         {
             OperationResult result = await _userBusinessObject.Update(uuid, user.ToUser());
             if (result.Exception is Exception)
