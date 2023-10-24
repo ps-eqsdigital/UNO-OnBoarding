@@ -1,0 +1,10 @@
+<div class="app-user">
+    <h2>Users</h2>
+    <input [(ngModel)]="searchQuery" (input)="getFilteredUsers()" placeholder="Search users">
+    <input [(ngModel)]="sortValue" (change)="getFilteredUsers()" placeholder="Sort users">
+    <ul class="app-user">
+      <li *ngFor="let user of users">
+        {{ user.name }} - {{ user.email }}
+      </li>
+    </ul>
+</div>
