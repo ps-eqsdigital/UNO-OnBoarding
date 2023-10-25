@@ -7,6 +7,9 @@ using Business.Base;
 using Business.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Business.BusinessObjects;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,23 @@ builder.Services.AddDbContext<UnoOnBoardingContext>(options =>
 builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
+builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+});
+
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Uno OnBoarding API",
+        Version = "1.0"
+    });
+});
 
 var app = builder.Build();
 
@@ -39,7 +59,10 @@ using (var scope = serviceScopeFactory.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UNO OnBoarding v1");
+    });
 }
 
 app.UseHttpsRedirection();
