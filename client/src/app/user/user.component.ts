@@ -17,18 +17,22 @@ export class UserComponent {
     picture: '',
     role: 0
   };
+
   constructor(private userService:UserService){
   } 
 
   showSuccessMessage :boolean =false;
-
+  errorMessage:boolean=false
+  
   insertUsers():void{
     this.userService.insertUser(this.user).subscribe((data:any) => {
       if (data.isSuccess == true){
         this.showSuccessMessage=true;
+        this.errorMessage=false
       }
-      else{
+      else{ 
         this.showSuccessMessage=false
+        this.errorMessage=true
       }
     })
   }

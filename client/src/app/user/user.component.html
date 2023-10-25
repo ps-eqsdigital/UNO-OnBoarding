@@ -26,6 +26,9 @@
     <button type="submit">Insert User</button>
     <div *ngIf="showSuccessMessage" class="success-message">
       User inserted successfully!
-    </div>   
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      Error
+    </div>    
   </form>
   
