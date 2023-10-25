@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 
 namespace Data.Context
 {
-    public class UnoOnBoardingContext: DbContext
+    public class UnoOnBoardingContext : DbContext
     {
         public UnoOnBoardingContext(DbContextOptions<UnoOnBoardingContext> options) : base(options)
         {
         }
         public DbSet<User>? Users { get; set; }
-    }       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().Property(u => u.Name).UseCollation("Latin1_General_CI_AI");
+        }
+    }
 }
