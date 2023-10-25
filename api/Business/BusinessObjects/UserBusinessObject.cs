@@ -36,11 +36,16 @@ namespace Business.BusinessObjects
 
                 if (user == null)
                 {
-                    throw new Exception("user doesn't exist");
+                    throw new Exception("user does not exist");
+                }
+                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
+                {
+                    throw new Exception();
                 }
                 else
                 {
                     user.Name = record.Name;
+                    user.Password = record.Password;
                     user.Email = record.Email;
                     user.Picture = record.Picture;
                     user.Password = record.Password;
