@@ -1,4 +1,5 @@
 ﻿using api.Requests;
+using Business.Base;
 using Business.Interfaces;
 using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace api.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult<List<User>>> ListUsers()
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
             var result = await _genericBusinessObject.ListAsync<User>();
             return result;
@@ -51,6 +52,16 @@ namespace api.Controllers
         {
             await _userBusinessObject.Update(uuid,user.ToUser());
             return Ok("Updated user");
+        }
+        [HttpGet("listFilteredUsers")]
+        public async Task<ActionResult> ListFilteredUsers(string search, int sort)
+        {
+            OperationResult result = await _userBusinessObject.ListFilteredUsers(search, sort);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
         }
     }   
 }

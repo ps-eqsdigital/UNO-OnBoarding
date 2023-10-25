@@ -10,6 +10,7 @@ using Business.BusinessObjects;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using DataAccess.DataAccessObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
