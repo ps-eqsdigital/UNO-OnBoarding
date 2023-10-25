@@ -3,7 +3,7 @@
     <input [(ngModel)]="searchQuery" (input)="getFilteredUsers()" placeholder="Search users">
     <input [(ngModel)]="sortValue" (change)="getFilteredUsers()" placeholder="Sort users">
     <ul class="app-user">
-      <li *ngFor="let user of users">
+      <li *ngFor="let user of filteredUsers">
         {{ user.name }} - {{ user.email }}
       </li>
     </ul>

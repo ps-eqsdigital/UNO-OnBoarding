@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { User } from './user';
 import { environment } from 'src/environments/environment';
 
@@ -23,12 +23,15 @@ export class UserService {
     }
 
   getFilteredUsers(search:string, sort:number):Observable<User[]>{
-    const params = new HttpParams();
-    params.set('search', search);
-    params.set('sort', sort.toString());
+    let params = new HttpParams();
+    params = params.set('search', search);
+    params = params.set('sort', sort.toString());
 
     return this.http.get<User[]>(environment.apiUrl + "/listFilteredUsers",{params})
       .pipe(
+        map((response: any) => {
+          return response.result;
+        }),
         catchError(this.handleError<User[]>('getFilteredUsers',[]))
       );
   }

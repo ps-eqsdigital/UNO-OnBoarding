@@ -10,7 +10,7 @@ import { UserService } from '../user.service';
 export class UserComponent {
   
   users: User[]=[];
-  filteredUsers=this.users;
+  filteredUsers:User[]=[];
 
   searchQuery: string = '';
   sortValue: number = 1;
@@ -20,6 +20,7 @@ export class UserComponent {
 
   ngOnInit(): void {
     this.getUsers();
+    this.getFilteredUsers();
   }
 
   getUsers():void{
@@ -30,5 +31,5 @@ export class UserComponent {
     this.userService.getFilteredUsers(this.searchQuery, this.sortValue).subscribe((users) => {
       this.filteredUsers = users;
     });
-  }
+  } 
 }

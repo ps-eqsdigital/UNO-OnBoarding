@@ -36,6 +36,7 @@ builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
 builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
+builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
 builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
