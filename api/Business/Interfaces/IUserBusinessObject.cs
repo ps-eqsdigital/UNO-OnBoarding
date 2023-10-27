@@ -13,6 +13,7 @@ namespace Business.Interfaces
     {
         public Task<OperationResult> Update(Guid uuid, User record);
         public Task<OperationResult<CreateUserBusinessModel>> Insert(User record);
+        public Task<OperationResult<List<User>>> ListFilteredUsers(string search, int sort);
 
     }
 }
