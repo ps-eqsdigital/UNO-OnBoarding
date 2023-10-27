@@ -5,6 +5,7 @@
     <ul class="app-user">
       <li *ngFor="let user of filteredUsers">
         {{ user.name }} - {{ user.email }}
+        <button (click)="navigateToEditPage(user.uuid)">Edit user</button>
       </li>
     </ul>
 </div>

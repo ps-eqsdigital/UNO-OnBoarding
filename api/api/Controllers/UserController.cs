@@ -46,7 +46,7 @@ namespace api.Controllers
             }
             return Ok(result);
         }
-        [HttpPut("update")]
+        [HttpPut("update/{uuid}")]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] UpdateUserRequest user)
         {
             OperationResult result = await _userBusinessObject.Update(uuid, user.ToUser());
