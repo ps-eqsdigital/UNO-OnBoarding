@@ -27,6 +27,7 @@ builder.Services.AddDbContext<UnoOnBoardingContext>(options =>
 builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
+builder.Services.AddScoped<IUserDataAccessObject,UserDataAccessObject>();
 builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
 builder.Services.AddApiVersioning(options =>
 {
