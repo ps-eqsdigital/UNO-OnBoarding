@@ -76,7 +76,6 @@ namespace Business.BusinessObjects
             {
                 if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
                 {
-                    Console.WriteLine("ola");
                     throw new Exception();
                 }
                 string password = GenerateRandomPassword();
