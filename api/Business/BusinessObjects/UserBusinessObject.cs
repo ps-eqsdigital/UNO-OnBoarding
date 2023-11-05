@@ -140,14 +140,14 @@ namespace Business.BusinessObjects
                         Token = token,
                         IsValid = true
                     };
-                    await _genericDataAccessObject.UpdateAsync<UserTokenAuthentication>(userToken);
                 }
                 else
                 {
                     userToken.Token = token;
                     userToken.IsValid = true;
-                    await _genericDataAccessObject.UpdateAsync<UserTokenAuthentication>(userToken);
                 }
+
+                await _genericDataAccessObject.UpdateAsync<UserTokenAuthentication>(userToken);
 
                 return new LoginBusinessModel { Token = token, User = new UserBusinessModel {
                     Email=result.Email, Name=result.Name, Picture=result.Picture, Uuid=result.Uuid
