@@ -23,27 +23,33 @@ namespace api.Middleware
                 var userDataAccessObject = serviceProvider.GetRequiredService<IUserDataAccessObject>();
 
                 string token = context.Request.Headers["Authorization"].FirstOrDefault()!;
+                var endpoint = context.GetEndpoint();
 
-                if (context.Request.Path == "/login" && context.Request.Method == "POST")
+                if (endpoint != null)
                 {
-                    await _next(context); 
-                }
-                else if (!string.IsNullOrWhiteSpace(token))
-                {
-                    var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
+                    var authorizeAttribute = endpoint.Metadata.GetMetadata<AuthorizeAttribute>();
 
-                    if (userToken != null && userToken.IsValid == true)
+                    if (authorizeAttribute == null)
                     {
-                        await _next(context);
+                        await _next(context); 
+                    }
+                    else if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
+
+                        if (userToken != null && userToken.IsValid == true)
+                        {
+                            await _next(context);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 401; 
+                        }
                     }
                     else
                     {
-                        context.Response.StatusCode = 401; 
+                        context.Response.StatusCode = 401;
                     }
-                }
-                else
-                {
-                    context.Response.StatusCode = 401;
                 }
             }
         }
