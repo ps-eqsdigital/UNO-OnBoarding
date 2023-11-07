@@ -63,7 +63,7 @@ namespace Business.BusinessObjects
                     user.Password = record.Password;
                     user.Email = record.Email;
                     user.Picture = record.Picture;
-                    user.Password = record.Password;
+                    user.Password = EncodePasswordToBase64(record.Password);
                     user.Phone = record.Phone;
                     user.Role = record.Role;
                 }
@@ -79,6 +79,7 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception();
                 }
+
                 List<User> users =await _userDataAccessObject.FilterUsers(search,sort);
                 var result = users.Select(u => new UserBusinessModel(u)).ToList();
 
@@ -102,9 +103,9 @@ namespace Business.BusinessObjects
                 }
 
                 string password = GenerateRandomPassword();
-                record.Password = password;
                 sendEmail(record.Email!, password);
 
+                record.Password = EncodePasswordToBase64(password);
                 await _genericDataAccessObject.InsertAsync<User>(record);
                 return new CreateUserBusinessModel { Uuid = record.Uuid};
             });
@@ -124,7 +125,7 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception("No email found");
                 }
-                if (result.Password != password)
+                if (DecodeFrom64(result.Password!) != password)
                 {
                     throw new Exception("Invalid password");
                 }
@@ -254,6 +255,33 @@ namespace Business.BusinessObjects
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        public static string EncodePasswordToBase64(string password)
+        {
+            try
+            {
+                byte[] encData_byte = new byte[password.Length];
+                encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
+                string encodedData = Convert.ToBase64String(encData_byte);
+                return encodedData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in base64Encode" + ex.Message);
+            }
+        }
+
+        public string DecodeFrom64(string encodedData)
+        {
+            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+            System.Text.Decoder utf8Decode = encoder.GetDecoder();
+            byte[] todecode_byte = Convert.FromBase64String(encodedData);
+            int charCount = utf8Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+            char[] decoded_char = new char[charCount];
+            utf8Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+            string result = new String(decoded_char);
+            return result;
         }
     }
 }
