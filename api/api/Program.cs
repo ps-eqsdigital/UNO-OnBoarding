@@ -34,7 +34,15 @@ builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
 builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
 builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigins, policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
@@ -106,5 +114,5 @@ app.UseAuthorization();
 app.UseMiddleware<TokenValidationMiddleware>();
 
 app.MapControllers();
-
+app.UseCors(myAllowSpecificOrigins);
 app.Run();
