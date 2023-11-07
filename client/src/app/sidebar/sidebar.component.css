@@ -1,0 +1,54 @@
+/* Updated CSS */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+  }
+  
+  .sidebar {
+    width: 100px;
+    background-color: blue;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .top-section {
+    color: white;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar ul li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none;
+    color: grey;
+    display: block;
+    padding: 10px 20px;
+    transition: background-color 0.3s; 
+  }
+  
+  .sidebar ul li a.selected {
+    color:white ; 
+    font-weight: bold; 
+  }
+  
+
+  .sidebar ul.menu + ul.menu {
+    margin-top: 400px; 
+  }
+
+  .sidebar ul.menu {
+    margin-top: 50px;
+  }
+  
+  
