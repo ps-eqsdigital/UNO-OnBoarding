@@ -1,27 +1,35 @@
-<div class="sidebar">
-    <div class="top-section">
-      <h2>UNO</h2>
+<div class="sidebar" [class.closed]="!isSidebarOpen">
+  <button id="toggleSidebar" (click)="toggleSidebar()" *ngIf="isMobileSize">
+    <div class="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-    <ul class="menu">
-      <li>
-        <a href="#" (click)="selectItem('Home')" [class.selected]="selectedItem === 'Home'">Home</a>
-      </li>
-      <li>
-        <a href="#" (click)="selectItem('Dashboards')" [class.selected]="selectedItem === 'Dashboards'">Dashboards</a>
-      </li>
-      <li>
-        <a href="#" (click)="selectItem('Sensors')" [class.selected]="selectedItem === 'Sensors'">Sensors</a>
-      </li>
-      <li>
-        <a href="#" (click)="selectItem('Users')" [class.selected]="selectedItem === 'Users'">Users</a>
-      </li>
-    </ul>
-    <ul class="menu">
-        <li>
-            <a href="#" (click)="selectItem('Settings')" [class.selected]="selectedItem === 'Settings'">Settings</a>
-        </li>
-        <li>
-            <a href="#" (click)="selectItem('Logout')" [class.selected]="selectedItem === 'Logout'">Logout</a>
-        </li>
-    </ul>
+  </button> 
+  <div class="top-section">
+    <h2>UNO</h2>
   </div>
+  <ul class="menu">
+    <li>
+      <a href="#" (click)="selectItem('Home')" [class.selected]="selectedItem === 'Home'">Home</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem('Dashboards')" [class.selected]="selectedItem === 'Dashboards'">Dashboards</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem('Sensors')" [class.selected]="selectedItem === 'Sensors'">Sensors</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem('Users')" [class.selected]="selectedItem === 'Users'">Users</a>
+    </li>
+  </ul>
+  <ul class="menu">
+    <li>
+      <a href="#" (click)="selectItem('Settings')" [class.selected]="selectedItem === 'Settings'">Settings</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem('Logout')" [class.selected]="selectedItem === 'Logout'">Logout</a>
+    </li>
+  </ul>
+</div>
+

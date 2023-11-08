@@ -1,5 +1,3 @@
-/* Updated CSS */
-
 html, body {
     height: 100%;
     margin: 0;
@@ -8,14 +6,43 @@ html, body {
   }
   
   .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100px;
     background-color: blue;
     height: 100vh;
     overflow-y: auto;
   }
   
+  #toggleSidebar {
+    position: absolute;
+    top: 5px; 
+    left: 150px; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1; 
+  }
+  
+  .hamburger-menu {
+    display: block;
+    width: 30px; 
+    height: 20px;
+    position: relative;
+  }
+  
+  .hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin: 4px 0; 
+  }
+
   .top-section {
     color: white;
+    padding-left: 10px;
   }
   
   .sidebar ul {
@@ -31,7 +58,9 @@ html, body {
   
   .sidebar ul li a {
     text-decoration: none;
-    color: grey;
+    font-size: small;
+    color: white;
+    opacity: 0.7;
     display: block;
     padding: 10px 20px;
     transition: background-color 0.3s; 
@@ -39,6 +68,7 @@ html, body {
   
   .sidebar ul li a.selected {
     color:white ; 
+    opacity:1;
     font-weight: bold; 
   }
   
@@ -50,5 +80,36 @@ html, body {
   .sidebar ul.menu {
     margin-top: 50px;
   }
+
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      width: 50%;
+      max-width: 100%; 
+      height: auto; 
+      position: relative;
+    }
   
+    .top-section {
+      display: none; 
+    }
+  
+    .sidebar ul.menu + ul.menu {
+      margin-top: 0; 
+    }
+  
+    .sidebar ul.menu {
+      margin-top: 0; 
+    }
+  
+    .sidebar ul li a {
+      font-size: small;
+      padding: 10px 10px;
+    }
+
+    .sidebar.closed {
+      height:40px;
+      transform: translateX(0%);
+      transition: transform 0.3s;
+    }
+  }
   
