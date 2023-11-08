@@ -21,7 +21,8 @@ export class LoginService {
   
     return this.http.post(this.loginUrl, body, { headers }).pipe(
       map((response:any)=>{
-        this.setToken(response.result.token);
+        this.setToken(response.result.token); 
+        return response;
       }),
       catchError(this.handleError<any>('login',[]))
     );

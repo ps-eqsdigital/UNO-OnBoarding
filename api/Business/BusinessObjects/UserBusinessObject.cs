@@ -175,7 +175,7 @@ namespace Business.BusinessObjects
             string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
             string uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string digits = "0123456789";
-            string specialCharacters = "!@#$%^&*()_-+=<>?/\\";
+            string specialCharacters = "!@#$%^&*()_-+=<>?";
 
             string allCharacters = lowercaseLetters + uppercaseLetters + digits + specialCharacters;
 

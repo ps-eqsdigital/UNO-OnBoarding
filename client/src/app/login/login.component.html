@@ -17,6 +17,9 @@
         </div>
         <button type="submit">Enter</button>
       </form>
+      <div *ngIf="errorMessage" class="error-message">
+        Invalid credentials!
+      </div>
     </div>
   </div>
 </div>
