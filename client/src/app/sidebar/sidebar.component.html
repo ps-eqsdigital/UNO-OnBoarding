@@ -7,7 +7,8 @@
     </div>
   </button> 
   <div class="top-section">
-    <h2>UNO</h2>
+    <h2 *ngIf="isMobileSize">Olá</h2>
+    <h2 *ngIf="!isMobileSize">UNO</h2>
   </div>
   <ul class="menu">
     <li>
