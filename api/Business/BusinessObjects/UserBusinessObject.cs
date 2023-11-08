@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using Business.Utils;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -103,7 +104,9 @@ namespace Business.BusinessObjects
                 }
 
                 string password = GenerateRandomPassword();
-                sendEmail(record.Email!, password);
+                EmailUtils emailUtils = new EmailUtils();
+                string subject = "Password";
+                emailUtils.sendEmail(record.Email!,subject, password);
 
                 record.Password = EncodePasswordToBase64(password);
                 await _genericDataAccessObject.InsertAsync<User>(record);
@@ -204,7 +207,7 @@ namespace Business.BusinessObjects
             var smtpPortString = configuration["SmtpConfig:SmtpPort"];
             var smtpUsername = configuration["SmtpConfig:SmtpUsername"];
             var smtpPassword = configuration["SmtpConfig:SmtpPassword"];
-            int smtpPort = int.Parse(smtpPortString!);
+            int smtpPort = int.Parse(smtpPortString);
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress("unoonboarding@sapo.pt");
