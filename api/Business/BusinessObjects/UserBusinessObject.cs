@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using Business.Utils;
 
 namespace Business.BusinessObjects
 {
@@ -79,8 +80,10 @@ namespace Business.BusinessObjects
                 }
                 string password = GenerateRandomPassword();
                 record.Password = password;
-                sendEmail(record.Email!, password);
-
+                EmailUtils emailUtils = new EmailUtils();
+                string subject = "Password";
+                emailUtils.sendEmail(record.Email!,subject, password);
+                Console.Write(record);
                 await _genericDataAccessObject.InsertAsync<User>(record);
                 return new CreateUserBusinessModel { Uuid = record.Uuid};
             });
@@ -108,39 +111,6 @@ namespace Business.BusinessObjects
             return passwordBuilder.ToString();
         }
 
-        private void sendEmail(string email, string password)
-        {
-            IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            var smtpServer = configuration["SmtpConfig:SmtpServer"];
-            var smtpPortString = configuration["SmtpConfig:SmtpPort"];
-            var smtpUsername = configuration["SmtpConfig:SmtpUsername"];
-            var smtpPassword = configuration["SmtpConfig:SmtpPassword"];
-            int smtpPort = int.Parse(smtpPortString);
-
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("unoonboarding@sapo.pt");
-            mail.To.Add(email);
-            mail.Subject = "User password";
-            mail.Body = "Your password is " + password;
-
-            SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort);
-            smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
-            smtpClient.EnableSsl = true;
-
-            try
-            {
-                smtpClient.Send(mail);
-                Console.WriteLine("Email sent successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error sending email: " + ex.Message);
-            }
-        }
         static bool IsValidEmail(string email)
         {
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
