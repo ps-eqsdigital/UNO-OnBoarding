@@ -27,16 +27,18 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                long currentUserId = (long)context.Items["User"]!;
+                object userObject = context.Items["User"]!;
+
+                if (userObject == null)
+                {
+                    throw new Exception("Session expired");
+                }
 
                 if (record.Name.IsNullOrEmpty() || record.Description.IsNullOrEmpty() || record.Category.IsNullOrEmpty() || record.Color.IsNullOrEmpty()) {
                     throw new Exception("Missing fields");
                 }
 
-                if (currentUserId == 0)
-                {
-                    throw new Exception("Sesson expired");
-                }
+                long currentUserId = (long)userObject;
 
                 record.UserId = currentUserId;
                 await _genericDataAccessObject.InsertAsync<Sensor>(record);
