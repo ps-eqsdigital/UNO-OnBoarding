@@ -105,7 +105,7 @@ using (var scope = serviceScopeFactory.CreateScope())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "UNO OnBoarding v1");
     });
-}
+
 
 app.UseHttpsRedirection();
 
