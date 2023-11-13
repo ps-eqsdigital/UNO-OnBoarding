@@ -7,32 +7,32 @@
     background-color: #f7f7f7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  
+
   .edit-heading {
     font-size: 24px;
     margin-bottom: 20px;
   }
-  
+
   .user-form {
     margin-bottom: 20px;
   }
-  
+
   .form-group {
     margin-bottom: 10px;
   }
-  
+
   .form-label {
     display: block;
     font-weight: bold;
   }
-  
+
   .form-input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
+
   .save-button {
     background-color: #007bffc2;
     color: #fff;
@@ -41,7 +41,7 @@
     border-radius: 4px;
     cursor: pointer;
   }
-  
+
   .back-button {
     background-color: #ccc;
     color: #333;
@@ -51,9 +51,8 @@
     cursor: pointer;
     margin-right: 10px;
   }
-  
+
   .error-message {
     color: #f00;
     margin-top: 10px;
   }
-  

@@ -18,7 +18,7 @@ namespace api.Controllers
             _userBusinessObject = userBusinessObject;
         }
 
-        [HttpGet("get"), Authorize]
+        [HttpGet("get")]
         public async Task<ActionResult<List<UserBusinessModel>>> GetUsers()
         {
             var result = await _userBusinessObject.GetUsers();

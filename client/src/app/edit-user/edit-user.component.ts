@@ -5,11 +5,11 @@ import { UserService } from '../user.service';
 import { User } from '../user';
 
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css']
+  selector: 'app-edit-user',
+  templateUrl: './edit-user.component.html',
+  styleUrls: ['./edit-user.component.css']
 })
-export class UserEditComponent implements OnInit {
+export class EditUserComponent implements OnInit {
   error: string | null = null; 
 
   userForm: FormGroup;
