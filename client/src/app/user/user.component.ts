@@ -9,35 +9,32 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent {
-  
-  users: User[]=[];
-  filteredUsers:User[]=[];
+  user: User = {
+    id: 0,
+    name: '',
+    password: '',
+    email: '',
+    phone: '',
+    picture: '',
+    role: 0
+  };
 
-  searchQuery: string = '';
-  sortValue: number = 1;
-
-  constructor(private userService:UserService, private router: Router){
-  }
-
-  ngOnInit(): void {
-    this.getUsers();
-    this.getFilteredUsers();
-  }
-
-  getUsers():void{
-    this.userService.getUsers().subscribe(users=>this.users=users)
-  }
-  
-  getFilteredUsers(): void {
-    this.userService.getFilteredUsers(this.searchQuery, this.sortValue).subscribe((users) => {
-      this.filteredUsers = users;
-    });
+  constructor(private userService:UserService){
   } 
 
-  editUser(uuid:string,data:User):void{
-    this.userService.editUserData(uuid,data).subscribe((data)=>console.log(uuid));
-  }
-  navigateToEditPage(userUuid: string) {
-    this.router.navigate(['/edit-user', userUuid]);
+  showSuccessMessage :boolean =false;
+  errorMessage:boolean=false
+  
+  insertUsers():void{
+    this.userService.insertUser(this.user).subscribe((data:any) => {
+      if (data.isSuccess == true){
+        this.showSuccessMessage=true;
+        this.errorMessage=false
+      }
+      else{ 
+        this.showSuccessMessage=false
+        this.errorMessage=true
+      }
+    })
   }
 }

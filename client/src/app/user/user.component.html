@@ -1,11 +1,34 @@
-<div class="app-user">
-    <h2>Users</h2>
-    <input [(ngModel)]="searchQuery" (input)="getFilteredUsers()" placeholder="Search users">
-    <input [(ngModel)]="sortValue" (change)="getFilteredUsers()" placeholder="Sort users">
-    <ul class="app-user">
-      <li *ngFor="let user of filteredUsers">
-        {{ user.name }} - {{ user.email }}
-        <button (click)="navigateToEditPage(user.uuid)">Edit user</button>
-      </li>
-    </ul>
-</div>
+<form (ngSubmit)="insertUsers()">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="user.name" name="name">
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="user.email" name="email">
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" [(ngModel)]="user.password" name="password">
+    </div>
+    <div>
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" [(ngModel)]="user.phone" name="phone">
+    </div>
+    <div>
+      <label for="picture">Picture:</label>
+      <input type="text" id="picture" [(ngModel)]="user.picture" name="picture">
+    </div>
+    <div>
+      <label for="role">Role:</label>
+      <input type="number" id="role" [(ngModel)]="user.role" name="role">
+    </div>
+    <button type="submit">Insert User</button>
+    <div *ngIf="showSuccessMessage" class="success-message">
+      User inserted successfully!
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      Error
+    </div>    
+  </form>
+  

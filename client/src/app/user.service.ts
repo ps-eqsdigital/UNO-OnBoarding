@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, Subject, catchError, map, of, tap } from 'rxjs';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { User } from './user';
 import { environment } from 'src/environments/environment';
@@ -9,6 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
+  private userUrl = 'https://localhost:5001'; 
   constructor(private http:HttpClient) { }
 
   httpOptions = {
@@ -28,28 +30,14 @@ export class UserService {
       );
     }
 
-  getFilteredUsers(search:string, sort:number):Observable<User[]>{
-    let params = new HttpParams();
-    params = params.set('search', search);
-    params = params.set('sort', sort.toString());
-
-    return this.http.get<User[]>(environment.apiUrl + "/listFilteredUsers",{params})
+  insertUser(user: any) {
+    return this.http.post<any>(this.userUrl + "/insert", user, this.httpOptions)
       .pipe(
         map((response: any) => {
-          return response.result;
+          return response;
         }),
-        catchError(this.handleError<User[]>('getFilteredUsers',[]))
+        catchError(this.handleError('insertUser', user))
       );
-  }
-
-  editUserData(uuid:string, data:User):Observable<User>{
-    return this.http.put(environment.apiUrl + "/update/" + uuid,data)
-    .pipe(
-      map((response:any)=>{
-        return response
-      }),
-      catchError(this.handleError<any>('editUser',[]))
-    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -60,10 +48,11 @@ export class UserService {
         return throwError('Bad Request occurred');
         
       } else {
-        console.error(error);
-        console.log(`${operation} failed: ${error.message}`);
-        return of(result as T);
-      }
-    }
+      console.error(error);
+
+      console.log(`${operation} failed: ${error.message}`);
+
+      return of(result as T);
+    };
   }
 }

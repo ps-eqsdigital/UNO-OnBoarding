@@ -11,6 +11,11 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.DataAccessObjects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Swashbuckle.AspNetCore.Filters;
+using api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,8 +40,8 @@ builder.Services.AddDbContext<UnoOnBoardingContext>(options =>
 builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
+builder.Services.AddScoped<IUserDataAccessObject,UserDataAccessObject>();
 builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
-builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
 builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
@@ -52,11 +57,36 @@ builder.Services.AddSwaggerGen(c =>
         Title = "Uno OnBoarding API",
         Version = "1.0"
     });
+    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name="Authorization",
+        Type=SecuritySchemeType.ApiKey
+    });
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+        ClockSkew = TimeSpan.Zero 
+    };
 });
 
 var app = builder.Build();
 
-var serviceScopeFactory = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory));
+var serviceScopeFactory = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory))!;
 
 using (var scope = serviceScopeFactory.CreateScope())
 {
@@ -66,18 +96,21 @@ using (var scope = serviceScopeFactory.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "UNO OnBoarding v1");
     });
-}
+
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+app.UseMiddleware<TokenValidationMiddleware>();
 app.UseCors(myAllowSpecificOrigins);
 
 app.MapControllers();
