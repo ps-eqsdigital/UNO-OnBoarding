@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
+    [Route("User")]
+
     public class UserController : Controller
     {
         private readonly IGenericBusinessObject _genericBusinessObject;

@@ -59,7 +59,7 @@ namespace DataAccess.DataAccessObjects
             return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
         }
 
-        public async Task<UserTokenAuthentication> GetTokenUuidByToken(string token)
+        public async Task<UserTokenAuthentication> GetToken(string token)
         {
             var result = await _context.Set<UserTokenAuthentication>().Where(x => x.Token == token).ToListAsync();
             return result.Where(x => !x.IsDeleted).SingleOrDefault()!;

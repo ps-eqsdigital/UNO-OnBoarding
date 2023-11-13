@@ -35,7 +35,7 @@ namespace api.Middleware
                     }
                     else if (!string.IsNullOrWhiteSpace(token))
                     {
-                        var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
+                        var userToken = await userDataAccessObject.GetToken(token.Substring("Bearer ".Length));
 
                         if (userToken != null && userToken.IsValid == true)
                         {
