@@ -3,6 +3,7 @@ using Business.Base;
 using Business.BusinessObjects;
 using Business.Interfaces;
 using Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -19,20 +20,20 @@ namespace api.Controllers
             _sensorBusinessObject = sensorBusinessObject;
         }
 
-        [HttpPost("insert")]
-        public async Task<ActionResult<Guid>> InsertSensor([FromBody] SensorRequest sensor, string token)
+        [HttpPost("insert"), Authorize]
+        public async Task<ActionResult<Guid>> InsertSensor([FromBody] SensorRequest sensor)
         {
-            OperationResult result = await _sensorBusinessObject.CreateSensor(sensor.ToSensor(), token);
+            OperationResult result = await _sensorBusinessObject.CreateSensor(sensor.ToSensor(), HttpContext);
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
             }
             return Ok(result);
         }
-        [HttpPut("update")]
-        public async Task<ActionResult> Update(Guid uuid, [FromBody] SensorRequest sensor, string token)
+        [HttpPut("update"), Authorize]
+        public async Task<ActionResult> Update(Guid uuid, [FromBody] SensorRequest sensor)
         {
-            OperationResult result = await _sensorBusinessObject.EditSensor(uuid, sensor.ToSensor(), token);
+            OperationResult result = await _sensorBusinessObject.EditSensor(uuid, sensor.ToSensor(),HttpContext);
             if (result.Exception is Exception)
             {
                 return StatusCode(400);

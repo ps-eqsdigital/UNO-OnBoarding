@@ -2,6 +2,7 @@
 using Business.Interfaces;
 using Data.Entities;
 using DataAccess.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,32 +23,34 @@ namespace Business.BusinessObjects
             _userDataAccessObject = userDataAccessObject;
         }
 
-        public async Task<OperationResult> CreateSensor(Sensor record, string token)
+        public async Task<OperationResult> CreateSensor(Sensor record, HttpContext context)
         {
             return await ExecuteOperation(async () =>
             {
+                long currentUserId = (long)context.Items["User"]!;
+
                 if (record.Name.IsNullOrEmpty() || record.Description.IsNullOrEmpty() || record.Category.IsNullOrEmpty() || record.Color.IsNullOrEmpty()) {
                     throw new Exception("Missing fields");
                 }
 
-                UserTokenAuthentication userToken = await _userDataAccessObject.GetToken(token);
-                if (userToken == null)
+                if (currentUserId == 0)
                 {
                     throw new Exception("Sesson expired");
                 }
 
-                long? userId = userToken.UserId;
-                record.UserId = userId;
+                record.UserId = currentUserId;
                 await _genericDataAccessObject.InsertAsync<Sensor>(record);
             });
         }
 
-        public async Task<OperationResult> EditSensor(Guid uuid, Sensor record, string token)
+        public async Task<OperationResult> EditSensor(Guid uuid, Sensor record, HttpContext context)
         {
             return await ExecuteOperation(async () =>
             {
 
                 Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(uuid);
+                long currentUserId = (long)context.Items["User"]!;
+
 
                 if (sensor == null)
                 {
@@ -57,10 +60,9 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception("Missing fields");
                 }
-                UserTokenAuthentication userToken = await _userDataAccessObject.GetToken(token);
-                if (userToken == null || sensor.UserId != userToken.UserId)
+                if (sensor.UserId != currentUserId)
                 {
-                    throw new Exception("Sesson expired");
+                    throw new Exception("Unauthorized");
                 }
                 else
                 {
