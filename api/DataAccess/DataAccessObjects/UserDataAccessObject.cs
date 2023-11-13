@@ -45,6 +45,24 @@ namespace DataAccess.DataAccessObjects
             }
         }
 
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var result = await _context.Set<User>().Where(x => x.Email == email)
+                .ToListAsync();
 
+            return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
+        }
+
+        public async Task<UserTokenAuthentication> GetUserTokenByUserId(long id)
+        {
+            var result = await _context.Set<UserTokenAuthentication>().Where(x => x.UserId == id).ToListAsync();
+            return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
+        }
+
+        public async Task<UserTokenAuthentication> GetTokenUuidByToken(string token)
+        {
+            var result = await _context.Set<UserTokenAuthentication>().Where(x => x.Token == token).ToListAsync();
+            return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
+        }
     }
 }
