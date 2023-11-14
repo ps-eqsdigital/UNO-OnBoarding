@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  templateUrl: './insert-user.component.html',
+  styleUrls: ['./insert-user.component.css']
 })
-export class UserComponent {
+export class InsertUserComponent {
   user: User = {
+    uuid:'' ,
     id: 0,
     name: '',
     password: '',
