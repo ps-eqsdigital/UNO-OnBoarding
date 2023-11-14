@@ -30,6 +30,7 @@ namespace api.Controllers
             }
             return Ok(result);
         }
+
         [HttpPut("update"), Authorize]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] SensorRequest sensor)
         {

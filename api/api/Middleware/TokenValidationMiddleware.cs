@@ -38,15 +38,15 @@ namespace api.Middleware
                     }
                     else if (!string.IsNullOrWhiteSpace(token))
                     {
-                        var userToken = await userDataAccessObject.GetToken(token.Substring("Bearer ".Length));
+                        UserTokenAuthentication userToken = await userDataAccessObject.GetToken(token.Substring("Bearer ".Length));
                         if (userToken != null && userToken.IsValid == true)
                         {
-                            var claims = new List<Claim>
+                            List<Claim> claims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.NameIdentifier, userToken.UserId.ToString()), 
                             };
-                            var userIdentity = new ClaimsIdentity(claims, "Token");
-                            var userPrincipal = new ClaimsPrincipal(userIdentity);
+                            ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "Token");
+                            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(userIdentity);
 
                             context.User = userPrincipal;
                             await _next(context);
