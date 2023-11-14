@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, Subject, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { User } from './user';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +16,31 @@ export class UserService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(environment.apiUrl + "/get")
+      .pipe(
+        catchError(this.handleError<User[]>('getUsers', []))
+      );
+    }
 
-  insertUser(user: any) {
-    return this.http.post<any>(this.userUrl + "/insert", user, this.httpOptions)
+  getFilteredUsers(search:string, sort:number):Observable<User[]>{
+    let params = new HttpParams();
+    params = params.set('search', search);
+    params = params.set('sort', sort.toString());
+
+    return this.http.get<User[]>(environment.apiUrl + "/listFilteredUsers",{params})
       .pipe(
         map((response: any) => {
-          return response;
+          return response.result;
         }),
-        catchError(this.handleError('insertUser', user))
+        catchError(this.handleError<User[]>('getFilteredUsers',[]))
       );
   }
 
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
+
       console.error(error);
 
       console.log(`${operation} failed: ${error.message}`);
