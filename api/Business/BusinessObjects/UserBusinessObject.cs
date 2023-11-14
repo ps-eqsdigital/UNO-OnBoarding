@@ -39,7 +39,7 @@ namespace Business.BusinessObjects
             return await ExecuteOperation(async () =>
             {
                 List<User> users = await _genericDataAccessObject.ListAsync<User>();
-                var result = users.Select(u => new UserBusinessModel(u)).ToList();
+                List<UserBusinessModel> result = users.Select(u => new UserBusinessModel(u)).ToList();
                 return result;
             });
 
@@ -163,7 +163,7 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                var result = await _userDataAccessObject.GetTokenUuidByToken(token);
+                UserTokenAuthentication result = await _userDataAccessObject.GetTokenUuidByToken(token);
                 if (result == null)
                 {
                     throw new Exception("Failed to logout");
@@ -215,14 +215,14 @@ namespace Business.BusinessObjects
                 new Claim(ClaimTypes.Name, user.Name!),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value!));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            JwtSecurityToken token = new JwtSecurityToken(
                 claims:claims,
                 expires:DateTime.Now.AddDays(1),
                 signingCredentials:creds
                 );
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            string jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
     }

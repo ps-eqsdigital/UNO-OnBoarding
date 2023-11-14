@@ -1,4 +1,5 @@
 ﻿using Business.Interfaces;
+using Data.Entities;
 using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -19,15 +20,15 @@ namespace api.Middleware
             // Create a scope to access scoped services
             using (var scope = context.RequestServices.CreateScope())
             {
-                var serviceProvider = scope.ServiceProvider;
-                var userDataAccessObject = serviceProvider.GetRequiredService<IUserDataAccessObject>();
+                IServiceProvider serviceProvider = scope.ServiceProvider;
+                IUserDataAccessObject userDataAccessObject = serviceProvider.GetRequiredService<IUserDataAccessObject>();
 
                 string token = context.Request.Headers["Authorization"].FirstOrDefault()!;
-                var endpoint = context.GetEndpoint();
+                Endpoint endpoint = context.GetEndpoint()!;
 
                 if (endpoint != null)
                 {
-                    var authorizeAttribute = endpoint.Metadata.GetMetadata<AuthorizeAttribute>();
+                    AuthorizeAttribute authorizeAttribute = endpoint.Metadata.GetMetadata<AuthorizeAttribute>()!;
 
                     if (authorizeAttribute == null)
                     {
@@ -35,7 +36,7 @@ namespace api.Middleware
                     }
                     else if (!string.IsNullOrWhiteSpace(token))
                     {
-                        var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
+                        UserTokenAuthentication userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
 
                         if (userToken != null && userToken.IsValid == true)
                         {
