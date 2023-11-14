@@ -91,6 +91,7 @@ namespace api.Controllers
             }
             return Ok(result);
         }
+
         [HttpPost("resetPassword")]
         public async Task<ActionResult> ResetPassword(string passwordResetToken, string newPassword)
         {
@@ -101,6 +102,7 @@ namespace api.Controllers
             }
             return Ok(result);
         }
+
         [HttpPost("logout"), Authorize]
         public async Task<ActionResult> Logout(string token)
         {
