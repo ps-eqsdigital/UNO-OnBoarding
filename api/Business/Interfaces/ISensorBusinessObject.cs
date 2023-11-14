@@ -11,8 +11,8 @@ namespace Business.Interfaces
 {
     public interface ISensorBusinessObject
     {
-        public Task<OperationResult> CreateSensor(Sensor record, HttpContext context);
-        public Task<OperationResult> EditSensor(Guid uuid, Sensor record, HttpContext context);
+        public Task<OperationResult> CreateSensor(Sensor record);
+        public Task<OperationResult> EditSensor(Guid uuid, Sensor record);
 
 
     }

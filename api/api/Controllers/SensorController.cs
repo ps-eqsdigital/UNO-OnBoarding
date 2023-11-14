@@ -23,7 +23,7 @@ namespace api.Controllers
         [HttpPost("insert"), Authorize]
         public async Task<ActionResult<Guid>> InsertSensor([FromBody] SensorRequest sensor)
         {
-            OperationResult result = await _sensorBusinessObject.CreateSensor(sensor.ToSensor(), HttpContext);
+            OperationResult result = await _sensorBusinessObject.CreateSensor(sensor.ToSensor());
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
@@ -33,7 +33,7 @@ namespace api.Controllers
         [HttpPut("update"), Authorize]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] SensorRequest sensor)
         {
-            OperationResult result = await _sensorBusinessObject.EditSensor(uuid, sensor.ToSensor(),HttpContext);
+            OperationResult result = await _sensorBusinessObject.EditSensor(uuid, sensor.ToSensor());
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
