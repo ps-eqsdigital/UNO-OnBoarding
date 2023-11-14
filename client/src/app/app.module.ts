@@ -9,13 +9,15 @@ import { InsertUserComponent } from './insert-user/insert-user.component';
 import { RouterModule } from '@angular/router';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { UnoChartComponent } from './uno-chart/uno-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InsertUserComponent,
     ListUsersComponent,
-    EditUserComponent
+    EditUserComponent,
+    UnoChartComponent
   ],
   imports: [
     BrowserModule,
