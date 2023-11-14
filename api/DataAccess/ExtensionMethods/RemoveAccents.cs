@@ -11,6 +11,7 @@ namespace DataAccess.ExtensionMethods
     {
         public static string RemoveDiacritics(this string s)
         {
+            if (s == null) return string.Empty;
             string normalizedString = s.Normalize(NormalizationForm.FormD);
             StringBuilder stringBuilder = new StringBuilder();
 

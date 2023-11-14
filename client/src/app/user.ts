@@ -1,4 +1,5 @@
 export interface User {
+    uuid:string
     id:number,
     name:string,
     password:string,
