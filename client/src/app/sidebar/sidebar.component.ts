@@ -25,7 +25,6 @@ export class SidebarComponent {
 
   checkIfMobileSize() {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
-    console.log(mediaQuery)
     this.isMobileSize = mediaQuery.matches;
   }
 }
