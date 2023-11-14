@@ -10,7 +10,9 @@ namespace DataAccess.Interfaces
     public interface IUserDataAccessObject
     {
         public Task<List<User>> FilterUsers(string search,int sort);
-
+        public Task<User> GetUserByEmail(string email);
+        public Task<UserTokenAuthentication> GetUserTokenByUserId(long id);
+        public Task<UserTokenAuthentication> GetToken(string token);
 
     }
 }

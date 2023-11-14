@@ -1,11 +1,15 @@
 ﻿using api.Requests;
 using Business.Base;
+using Business.BusinessModels;
 using Business.Interfaces;
 using Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
+    [Route("User")]
+
     public class UserController : Controller
     {
         private readonly IGenericBusinessObject _genericBusinessObject;
@@ -16,17 +20,18 @@ namespace api.Controllers
             _userBusinessObject = userBusinessObject;
         }
 
-        [HttpGet("get")]
-        public async Task<ActionResult<List<User>>> GetUsers()
+        [HttpGet("get"), Authorize]
+        public async Task<ActionResult<List<UserBusinessModel>>> GetUsers()
         {
-            List<User> result = await _genericBusinessObject.ListAsync<User>();
-            return result;
+            var result = await _userBusinessObject.GetUsers();
+            return Ok(result);
         }
 
         [HttpGet("get/{uuid}")]
         public async Task<ActionResult<User>> GetUserByUuid(Guid uuid)
         {
-            return await _genericBusinessObject.GetAsync<User>(uuid);
+            User? result = await _genericBusinessObject.GetAsync<User>(uuid);
+            return Ok(result!);
         }
 
         [HttpDelete("delete/{uuid}")]
@@ -65,6 +70,28 @@ namespace api.Controllers
                 return StatusCode(400);
             }
             return Ok(result);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(string email, string password)
+        {
+            OperationResult result = await _userBusinessObject.Login(email, password);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("logout"), Authorize]
+        public async Task<ActionResult> Logout(string token)
+        {
+            OperationResult result = await _userBusinessObject.Logout(token);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return StatusCode(200);
         }
     }   
 }

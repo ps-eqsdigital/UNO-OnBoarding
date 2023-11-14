@@ -1,36 +1,35 @@
 
-.app-user {
-    background-color: #f0f8ff; 
-    padding: 20px;
-    border-radius: 10px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    text-align: center; 
+form {
+    width: 300px;
+    margin: 0 auto;
   }
   
-  .app-user h2 {
-    color: #007BFF; 
-    font-size: 24px; 
-    margin-bottom: 20px; 
+  label {
+    color: blue; 
   }
   
-  .app-user ul {
-    list-style: none;
-    padding: 0;
+  input {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid blue;
+    border-radius: 5px;
   }
   
-  .app-user li {
-    background-color: #E6F7FF;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  button[type="submit"] {
+    background-color: blue; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
-  .app-user input {
-    padding: 8px;
-    border: 2px solid #007BFF; 
-    border-radius: 8px;
-    font-size: 16px;
-    margin-bottom: 10px;
+  .success-message {
+    color: green;
+    margin-top: 10px;
   }
-  
+
+  .error-message {
+    color:red;
+  }

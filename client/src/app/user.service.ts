@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
+  private userUrl = 'https://localhost:5001'; 
   constructor(private http:HttpClient) { }
 
   httpOptions = {
