@@ -12,7 +12,7 @@ namespace DataAccess.Interfaces
         public Task<List<User>> FilterUsers(string search,int sort);
         public Task<User> GetUserByEmail(string email);
         public Task<UserTokenAuthentication> GetUserTokenByUserId(long id);
-        public Task<UserTokenAuthentication> GetTokenUuidByToken(string token);
+        public Task<UserTokenAuthentication> GetToken(string token);
 
     }
 }

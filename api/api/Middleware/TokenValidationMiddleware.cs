@@ -1,7 +1,9 @@
 ﻿using Business.Interfaces;
+using Data.Entities;
 using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Security.Claims;
 
 namespace api.Middleware
 {
@@ -24,6 +26,7 @@ namespace api.Middleware
 
                 string token = context.Request.Headers["Authorization"].FirstOrDefault()!;
                 var endpoint = context.GetEndpoint();
+                
 
                 if (endpoint != null)
                 {
@@ -31,14 +34,21 @@ namespace api.Middleware
 
                     if (authorizeAttribute == null)
                     {
-                        await _next(context); 
+                        await _next(context);
                     }
                     else if (!string.IsNullOrWhiteSpace(token))
                     {
-                        var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
-
+                        UserTokenAuthentication userToken = await userDataAccessObject.GetToken(token.Substring("Bearer ".Length));
                         if (userToken != null && userToken.IsValid == true)
                         {
+                            List<Claim> claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.NameIdentifier, userToken.UserId.ToString()), 
+                            };
+                            ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "Token");
+                            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(userIdentity);
+
+                            context.User = userPrincipal;
                             await _next(context);
                         }
                         else

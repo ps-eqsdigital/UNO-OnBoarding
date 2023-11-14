@@ -20,6 +20,12 @@ export class InsertUserComponent {
     role: 0
   };
 
+  users: User[]=[];
+  filteredUsers:User[]=[];
+
+  searchQuery: string = '';
+  sortValue: number = 1;
+
   constructor(private userService:UserService){
   } 
 
