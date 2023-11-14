@@ -6,11 +6,20 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Business.Utils
 {
     public class EmailUtils
     {
+        public static bool IsValidEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            Regex regex = new Regex(pattern);
+
+            return regex.IsMatch(email);
+        }
+
         public void sendEmail(string email,string subject, string content)
         {
             try

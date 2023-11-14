@@ -83,6 +83,28 @@ namespace api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("recoverPassword")]
+        public async Task<ActionResult> RecoverPassword(string email)
+        {
+            OperationResult result = await _userBusinessObject.RecoverPassword(email);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<ActionResult> ResetPassword(string passwordResetToken, string newPassword)
+        {
+            OperationResult result = await _userBusinessObject.ResetPassword(passwordResetToken,newPassword);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
         [HttpPost("logout"), Authorize]
         public async Task<ActionResult> Logout(string token)
         {
