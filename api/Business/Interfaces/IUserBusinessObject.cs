@@ -17,6 +17,8 @@ namespace Business.Interfaces
         public Task<OperationResult<LoginBusinessModel>> Login(string email, string password);
         public Task<OperationResult<List<UserBusinessModel>>> GetUsers();
         public Task<OperationResult> Logout(string token);
+        public Task<OperationResult> RecoverPassword(string email);
+        public Task<OperationResult> ResetPassword(string passwordResetToken, string newPassword);
 
 
 

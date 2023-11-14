@@ -18,6 +18,8 @@ using System.Globalization;
 using Business.Utils;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Azure.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Business.BusinessObjects
 {
@@ -172,6 +174,57 @@ namespace Business.BusinessObjects
                 result!.IsValid = false;
                 await _genericDataAccessObject.UpdateAsync(result);
 
+            });
+        }
+
+        public async Task<OperationResult> RecoverPassword(string email)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                User user = await _userDataAccessObject.GetUserByEmail(email);
+
+                if (user == null)
+                {
+                    throw new Exception("User doesnt exist");
+                }
+                else
+                {
+                    string resetToken = CreateToken(user);
+
+                    user.PasswordResetToken = resetToken;
+                    user.PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1); 
+
+                    await _genericDataAccessObject.UpdateAsync(user);
+
+                    EmailUtils emailUtils = new EmailUtils();
+                    string subject = "Password Reset Token";
+                    emailUtils.sendEmail(email!, subject, resetToken);
+                }
+            });
+        } 
+
+        public async Task<OperationResult> ResetPassword(string passwordResetToken, string newPassword)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                User user = await _userDataAccessObject.GetUserByPasswordResetToken(passwordResetToken);
+
+                if (user == null)
+                {
+                    throw new Exception("Invalid token");
+                }
+                if (DateTime.UtcNow > user.PasswordResetTokenExpiration)
+                {
+                    throw new Exception("Token expired");
+                }
+                string userPassword=DecodeFrom64(user.Password!);
+                if (string.IsNullOrEmpty(newPassword) || newPassword == userPassword) {
+                    throw new Exception("Please insert a valid password");
+                }
+
+                user.Password = EncodePasswordToBase64(newPassword);
+                user.PasswordResetTokenExpiration = DateTime.UtcNow;
+                await _genericDataAccessObject.UpdateAsync(user);
             });
         }
         private string GenerateRandomPassword(int length = 12)

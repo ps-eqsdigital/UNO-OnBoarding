@@ -64,5 +64,10 @@ namespace DataAccess.DataAccessObjects
             var result = await _context.Set<UserTokenAuthentication>().Where(x => x.Token == token).ToListAsync();
             return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
         }
+        public async Task<User> GetUserByPasswordResetToken(string token)
+        {
+            var result = await _context.Set<User>().Where(x=>x.PasswordResetToken == token).ToListAsync();
+            return result.Where(x => !x.IsDeleted).SingleOrDefault()!;
+        }
     }
 }
