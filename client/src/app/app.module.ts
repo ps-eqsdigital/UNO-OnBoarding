@@ -11,7 +11,10 @@ import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CheckboxComponent } from './checkbox/checkbox.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     OptionsListComponent,
     ButtonComponent,
     InputComponent,
-    SlideToggleComponent
+    SlideToggleComponent,
+    CheckboxComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +31,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatInputModule
   ],
-  providers: [],
+  providers: [],  
   bootstrap: [AppComponent],
     })
 export class AppModule { }
