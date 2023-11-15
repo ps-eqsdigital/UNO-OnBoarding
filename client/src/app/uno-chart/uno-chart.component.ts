@@ -1,5 +1,7 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
+Chart.register(zoomPlugin);
 
 @Component({
   selector: 'app-uno-chart',
@@ -53,6 +55,18 @@ export class UnoChartComponent implements AfterViewInit {
               display: true,
               text: 'y'
             } 
+          }
+        },
+        plugins: {
+          zoom: {
+            zoom: {
+              wheel: {
+                enabled: true,
+              },
+              pinch: {
+                enabled: true
+              },
+            }
           }
         }
       }
