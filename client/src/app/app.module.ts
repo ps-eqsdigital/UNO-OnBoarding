@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms'; // Import FormsModule
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +15,10 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { InsertUserComponent } from './insert-user/insert-user.component';
+import { RouterModule } from '@angular/router';
+import { ListUsersComponent } from './list-users/list-users.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 import { MatInputModule } from '@angular/material/input';
 
@@ -24,6 +30,10 @@ import { MatInputModule } from '@angular/material/input';
     InputComponent,
     SlideToggleComponent,
     CheckboxComponent
+    AppComponent,
+    InsertUserComponent,
+    ListUsersComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +44,11 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatInputModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [],  
   bootstrap: [AppComponent],

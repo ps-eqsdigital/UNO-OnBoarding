@@ -1,0 +1,35 @@
+
+form {
+    width: 300px;
+    margin: 0 auto;
+  }
+  
+  label {
+    color: blue; 
+  }
+  
+  input {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid blue;
+    border-radius: 5px;
+  }
+  
+  button[type="submit"] {
+    background-color: blue; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+
+  .error-message {
+    color:red;
+  }

@@ -14,6 +14,8 @@ namespace Data.Entities
         public string? Email { get; set; }
         public string? Phone {  get; set; }
         public string? Picture { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime PasswordResetTokenExpiration { get; set; }
         public Role Role { get; set; }
     }
 }
