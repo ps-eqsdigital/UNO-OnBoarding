@@ -12,24 +12,24 @@
   </div>
   <ul class="menu">
     <li>
-      <a href="#" (click)="selectItem('Home')" [class.selected]="selectedItem === 'Home'">Home</a>
+      <a href="#" (click)="selectItem(selectableItems.Home)" [class.selected]="selectedItem === selectableItems.Home">Home</a>
     </li>
     <li>
-      <a href="#" (click)="selectItem('Dashboards')" [class.selected]="selectedItem === 'Dashboards'">Dashboards</a>
+      <a href="#" (click)="selectItem(selectableItems.Dashboards)" [class.selected]="selectedItem === selectableItems.Dashboards">Dashboards</a>
     </li>
     <li>
-      <a href="#" (click)="selectItem('Sensors')" [class.selected]="selectedItem === 'Sensors'">Sensors</a>
+      <a href="#" (click)="selectItem(selectableItems.Sensors)" [class.selected]="selectedItem === selectableItems.Sensors">Sensors</a>
     </li>
     <li>
-      <a href="#" (click)="selectItem('Users')" [class.selected]="selectedItem === 'Users'">Users</a>
+      <a href="#" (click)="selectItem(selectableItems.Users)" [class.selected]="selectedItem === selectableItems.Users">Users</a>
     </li>
   </ul>
   <ul class="menu">
     <li>
-      <a href="#" (click)="selectItem('Settings')" [class.selected]="selectedItem === 'Settings'">Settings</a>
+      <a href="#" (click)="selectItem(selectableItems.Settings)" [class.selected]="selectedItem === selectableItems.Settings">Settings</a>
     </li>
     <li>
-      <a href="#" (click)="selectItem('Logout')" [class.selected]="selectedItem === 'Logout'">Logout</a>
+      <a href="#" (click)="selectItem(selectableItems.Logout)" [class.selected]="selectedItem === selectableItems.Logout">Logout</a>
     </li>
   </ul>
 </div>

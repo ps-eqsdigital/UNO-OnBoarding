@@ -1,5 +1,15 @@
 import { Component } from '@angular/core';
 
+// Enum defining selectable items
+enum SelectableItems {
+  Home = 'Home',
+  Dashboards = 'Dashboards',
+  Sensors = 'Sensors',
+  Users = 'Users',
+  Settings = 'Settings',
+  Logout = 'Logout'
+}
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -11,9 +21,10 @@ export class SidebarComponent {
     this.checkIfMobileSize();
   }
   
-  selectedItem: string = 'Home'; 
-  isSidebarOpen : boolean = true;
+  selectedItem: string = SelectableItems.Home; 
+  isSidebarOpen: boolean = true;
   isMobileSize: boolean = false;
+  selectableItems = SelectableItems;
 
   selectItem(item: string) {
     this.selectedItem = item;
