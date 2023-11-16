@@ -41,7 +41,7 @@ namespace Business.BusinessObjects
             return await ExecuteOperation(async () =>
             {
                 List<User> users = await _genericDataAccessObject.ListAsync<User>();
-                var result = users.Select(u => new UserBusinessModel(u)).ToList();
+                List<UserBusinessModel> result = users.Select(u => new UserBusinessModel(u)).ToList();
                 return result;
             });
 
@@ -168,7 +168,7 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                var result = await _userDataAccessObject.GetToken(token);
+                UserTokenAuthentication result = await _userDataAccessObject.GetTokenUuidByToken(token);
                 if (result == null)
                 {
                     throw new Exception("Failed to logout");

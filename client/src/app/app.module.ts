@@ -16,6 +16,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     InsertUserComponent,
     ListUsersComponent,
     EditUserComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
