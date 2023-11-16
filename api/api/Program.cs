@@ -20,7 +20,15 @@ using api.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigins, policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,25 +40,16 @@ builder.Services.AddDbContext<UnoOnBoardingContext>(options =>
 builder.Services.AddScoped<IGenericDataAccessObject, GenericDataAccessObject>();
 builder.Services.AddScoped<IGenericBusinessObject, GenericBusinessObject>();
 builder.Services.AddScoped<IUserBusinessObject, UserBusinessObject>();
-builder.Services.AddScoped<IUserDataAccessObject,UserDataAccessObject>();
 builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
 builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
-var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(myAllowSpecificOrigins, policy =>
-    {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
+builder.Services.AddScoped<ISensorBusinessObject, SensorBusinessObject>();
 builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
 });
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -98,14 +97,14 @@ using (var scope = serviceScopeFactory.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "UNO OnBoarding v1");
     });
-}
+
 
 app.UseHttpsRedirection();
 
@@ -113,6 +112,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 app.UseMiddleware<TokenValidationMiddleware>();
+app.UseCors(myAllowSpecificOrigins);
 
 app.MapControllers();
 app.UseCors(myAllowSpecificOrigins);

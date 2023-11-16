@@ -3,6 +3,7 @@ using Data.Entities;
 using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Security.Claims;
 
 namespace api.Middleware
 {
@@ -32,14 +33,22 @@ namespace api.Middleware
 
                     if (authorizeAttribute == null)
                     {
-                        await _next(context); 
+                        await _next(context);
                     }
                     else if (!string.IsNullOrWhiteSpace(token))
                     {
-                        UserTokenAuthentication userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
+                        var userToken = await userDataAccessObject.GetTokenUuidByToken(token.Substring("Bearer ".Length));
 
                         if (userToken != null && userToken.IsValid == true)
                         {
+                            List<Claim> claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.NameIdentifier, userToken.UserId.ToString()), 
+                            };
+                            ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "Token");
+                            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(userIdentity);
+
+                            context.User = userPrincipal;
                             await _next(context);
                         }
                         else

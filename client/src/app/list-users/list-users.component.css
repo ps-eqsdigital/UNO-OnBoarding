@@ -1,0 +1,43 @@
+.app-user {
+  background-color: #f0f8ff; 
+  padding: 20px;
+  border-radius: 10px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  text-align: center; 
+}
+
+.app-user h2 {
+  color: #007BFF; 
+  font-size: 24px; 
+  margin-bottom: 20px; 
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.insert-button {
+  align-self: flex-end;
+}
+
+.app-user ul {
+  list-style: none;
+  padding: 0;
+}
+
+.app-user li {
+  background-color: #E6F7FF;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.app-user input {
+  padding: 8px;
+  border: 2px solid #007BFF; 
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}

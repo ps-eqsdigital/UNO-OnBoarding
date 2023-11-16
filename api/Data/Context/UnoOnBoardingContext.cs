@@ -14,6 +14,9 @@ namespace Data.Context
         public UnoOnBoardingContext(DbContextOptions<UnoOnBoardingContext> options) : base(options)
         {
         }
+        public DbSet<Sensor>? Sensors { get; set; }
+        public DbSet<SensorData>? SensorsData { get; set; }
+
         public DbSet<User>? Users { get; set; }
         public DbSet<UserTokenAuthentication>? UserTokenAuthentication { get; set; }
 

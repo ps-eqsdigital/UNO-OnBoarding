@@ -15,9 +15,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using Business.Utils;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Business.Utils;
+using Azure.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Business.BusinessObjects
 {
@@ -54,7 +56,7 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception("user does not exist");
                 }
-                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
+                if (!EmailUtils.IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
                 {
                     throw new Exception();
                 }
@@ -64,7 +66,7 @@ namespace Business.BusinessObjects
                     user.Password = record.Password;
                     user.Email = record.Email;
                     user.Picture = record.Picture;
-                    user.Password = record.Password;
+                    user.Password = PasswordUtils.EncodePasswordToBase64(record.Password!);
                     user.Phone = record.Phone;
                     user.Role = record.Role;
                 }
@@ -80,6 +82,7 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception();
                 }
+
                 List<User> users =await _userDataAccessObject.FilterUsers(search,sort);
                 var result = users.Select(u => new UserBusinessModel(u)).ToList();
 
@@ -91,7 +94,8 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
+
+                if (!EmailUtils.IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
                 {
                     throw new Exception();
                 }
@@ -102,12 +106,13 @@ namespace Business.BusinessObjects
                    throw new Exception("Email already exists");
                 }
 
-                string password = GenerateRandomPassword();
-                record.Password = password;
-                EmailUtils emailUtils = new EmailUtils();
+                string password = PasswordUtils.GenerateRandomPassword();
                 string subject = "Password";
+                
+                EmailUtils emailUtils = new EmailUtils();
                 emailUtils.sendEmail(record.Email!,subject, password);
-                Console.Write(record);
+
+                record.Password = PasswordUtils.EncodePasswordToBase64(password);
                 await _genericDataAccessObject.InsertAsync<User>(record);
                 return new CreateUserBusinessModel { Uuid = record.Uuid};
             });
@@ -117,7 +122,7 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                if (!IsValidEmail(email))
+                if (!EmailUtils.IsValidEmail(email))
                 {
                     throw new Exception("Invalid email");
                 }
@@ -127,11 +132,11 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception("No email found");
                 }
-                if (result.Password != password)
+                if (PasswordUtils.DecodeFrom64(result.Password!) != password)
                 {
                     throw new Exception("Invalid password");
                 }
-                string token = CreateToken(result);
+                string token = TokenUtils.CreateAuthenticationToken(result);
 
                 UserTokenAuthentication userToken = await _userDataAccessObject.GetUserTokenByUserId(result.Id);
 
@@ -173,57 +178,56 @@ namespace Business.BusinessObjects
 
             });
         }
-        private string GenerateRandomPassword(int length = 12)
+
+        public async Task<OperationResult> RecoverPassword(string email)
         {
-            string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
-            string uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string digits = "0123456789";
-            string specialCharacters = "!@#$%^&*()_-+=<>?";
-
-            string allCharacters = lowercaseLetters + uppercaseLetters + digits + specialCharacters;
-
-            length = Math.Max(length, 8);
-
-            Random random = new Random();
-            StringBuilder passwordBuilder = new StringBuilder();
-            for (int i = 0; i < length; i++)
+            return await ExecuteOperation(async () =>
             {
-                int index = random.Next(allCharacters.Length);
-                passwordBuilder.Append(allCharacters[index]);
-            }
+                User user = await _userDataAccessObject.GetUserByEmail(email);
 
-            return passwordBuilder.ToString();
-        }
+                if (user == null)
+                {
+                    throw new Exception("User doesnt exist");
+                }
+                else
+                {
+                    string resetToken = TokenUtils.GeneratePasswordResetToken();
 
-        static bool IsValidEmail(string email)
+                    user.PasswordResetToken = resetToken;
+                    user.PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1); 
+
+                    await _genericDataAccessObject.UpdateAsync(user);
+
+                    EmailUtils emailUtils = new EmailUtils();
+                    string subject = "Password Reset Token";
+                    emailUtils.sendEmail(email!, subject, resetToken);
+                }
+            });
+        } 
+
+        public async Task<OperationResult> ResetPassword(string passwordResetToken, string newPassword)
         {
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            Regex regex = new Regex(pattern);
-
-            return regex.IsMatch(email);
-        }
-
-        private string CreateToken(User user)
-        {
-            IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            List<Claim> claims = new List<Claim>
+            return await ExecuteOperation(async () =>
             {
-                new Claim(ClaimTypes.Name, user.Name!),
-            };
+                User user = await _userDataAccessObject.GetUserByPasswordResetToken(passwordResetToken);
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value!));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            JwtSecurityToken token = new JwtSecurityToken(
-                claims:claims,
-                expires:DateTime.Now.AddDays(1),
-                signingCredentials:creds
-                );
-            string jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
+                if (user == null)
+                {
+                    throw new Exception("Invalid token");
+                }
+                if (DateTime.UtcNow > user.PasswordResetTokenExpiration)
+                {
+                    throw new Exception("Token expired");
+                }
+                string userPassword= PasswordUtils.DecodeFrom64(user.Password!);
+                if (string.IsNullOrEmpty(newPassword) || newPassword == userPassword) {
+                    throw new Exception("Please insert a valid password");
+                }
+
+                user.Password = PasswordUtils.EncodePasswordToBase64(newPassword);
+                user.PasswordResetTokenExpiration = DateTime.UtcNow;
+                await _genericDataAccessObject.UpdateAsync(user);
+            });
         }
     }
 }
