@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-  private userUrl = 'https://localhost:5001'; 
   constructor(private http:HttpClient) { }
 
   httpOptions = {
@@ -17,20 +16,20 @@ export class UserService {
   };
   
   getUser(uuid:string):Observable<User>{
-    return this.http.get<User>(environment.apiUrl + "/get/"+uuid)
+    return this.http.get<User>(environment.apiUrl + "/User/get/"+uuid)
     .pipe(
       catchError(this.handleError<User>('getUser'))
     );
   }
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(environment.apiUrl + "/get")
+    return this.http.get<User[]>(environment.apiUrl + "/User/get")
       .pipe(
         catchError(this.handleError<User[]>('getUsers', []))
       );
     }
 
   insertUser(user: any) {
-    return this.http.post<any>(this.userUrl + "/insert", user, this.httpOptions)
+    return this.http.post<any>(environment.apiUrl+ "/User/insert", user, this.httpOptions)
       .pipe(
         map((response: any) => {
           return response;
@@ -44,7 +43,7 @@ export class UserService {
     params = params.set('search', search);
     params = params.set('sort', sort.toString());
   
-    return this.http.get<User[]>(environment.apiUrl + "/listFilteredUsers",{params})
+    return this.http.get<User[]>(environment.apiUrl + "/User/listFilteredUsers",{params})
       .pipe(
         map((response: any) => {
           return response.result;
@@ -54,7 +53,7 @@ export class UserService {
   }
   
   editUserData(uuid:string, data:User):Observable<User>{
-    return this.http.put(environment.apiUrl + "/update/" + uuid,data)
+    return this.http.put(environment.apiUrl + "/User/update/" + uuid,data)
     .pipe(
       map((response:any)=>{
         return response
