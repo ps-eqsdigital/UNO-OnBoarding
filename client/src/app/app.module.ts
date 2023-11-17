@@ -12,7 +12,6 @@ import { InputComponent } from './input/input.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { InsertUserComponent } from './insert-user/insert-user.component';
@@ -29,7 +28,7 @@ import { MatInputModule } from '@angular/material/input';
     ButtonComponent,
     InputComponent,
     SlideToggleComponent,
-    CheckboxComponent
+    CheckboxComponent,
     AppComponent,
     InsertUserComponent,
     ListUsersComponent,
@@ -43,7 +42,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatInputModule
+    MatInputModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
