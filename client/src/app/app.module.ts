@@ -10,6 +10,8 @@ import { RouterModule } from '@angular/router';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { LoginComponent } from './login/login.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { LoginComponent } from './login/login.component';
     InsertUserComponent,
     ListUsersComponent,
     EditUserComponent,
-    LoginComponent
+    LoginComponent,
+    ForgetPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

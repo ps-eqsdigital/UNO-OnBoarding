@@ -62,6 +62,36 @@ export class UserService {
     );
   }
 
+  forgetPassword(email:string) : Observable<any>{
+    const requestBody = {
+      email: email,
+    };
+
+    return this.http.post(environment.apiUrl+"/User/forgetPassword/",requestBody, this.httpOptions)
+    .pipe(
+      map((response:any)=>{
+        return response
+      }),
+      catchError(this.handleError<any>('forgetPassword',[]))
+    )
+  }
+
+  resetPassword(token: string, password: string):Observable<any> {
+    const requestBody = {
+      PasswordResetToken: token,
+      Password: password
+    };
+
+    return this.http.post<any>(environment.apiUrl+"/User/resetPassword/",requestBody, this.httpOptions)
+    .pipe(
+      map((response:any)=>{
+        return response
+      }),
+      catchError(this.handleError<any>('resetPassword', []))
+    );
+  }
+
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       if (error.status === 400) {
