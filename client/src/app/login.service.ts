@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-
-  private loginUrl='https://localhost:7215/login'
 
   constructor(private http:HttpClient) { }
 
@@ -19,7 +18,7 @@ export class LoginService {
     const body = { email, password };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
-    return this.http.post(this.loginUrl, body, { headers }).pipe(
+    return this.http.post(environment.apiUrl+'/User/login', body, { headers }).pipe(
       map((response:any)=>{
         this.setToken(response.result.token); 
         return response;

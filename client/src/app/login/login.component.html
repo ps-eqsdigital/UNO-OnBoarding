@@ -15,6 +15,9 @@
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" placeholder="Insert your password" [(ngModel)]="password" required>
         </div>
+        <div class="forget-password">
+          <a href="/forget-password">Forgot Password?</a>
+        </div>  
         <button type="submit">Enter</button>
       </form>
       <div *ngIf="errorMessage" class="error-message">
