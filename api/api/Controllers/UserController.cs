@@ -112,6 +112,7 @@ namespace api.Controllers
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
+
             }
             return StatusCode(200);
         }
