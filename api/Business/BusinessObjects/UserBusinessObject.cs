@@ -15,6 +15,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using Business.Utils;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Azure.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Business.BusinessObjects
 {
@@ -22,23 +27,36 @@ namespace Business.BusinessObjects
     {
         private readonly IGenericDataAccessObject _genericDataAccessObject;
         private readonly IUserDataAccessObject _userDataAccessObject;
-        public UserBusinessObject(IGenericDataAccessObject genericDataAccessObject, IUserDataAccessObject userDataAccessObject)
+        private readonly IConfiguration _configuration;
+
+        public UserBusinessObject(IGenericDataAccessObject genericDataAccessObject, IUserDataAccessObject userDataAccessObject, IConfiguration configuration)
         {
             _genericDataAccessObject = genericDataAccessObject;
             _userDataAccessObject = userDataAccessObject;
+            _configuration = configuration;
         }
 
+        public async Task<OperationResult<List<UserBusinessModel>>> GetUsers()
+        {
+            return await ExecuteOperation(async () =>
+            {
+                List<User> users = await _genericDataAccessObject.ListAsync<User>();
+                List<UserBusinessModel> result = users.Select(u => new UserBusinessModel(u)).ToList();
+                return result;
+            });
+
+        }
         public async Task<OperationResult> Update(Guid uuid, User record)
         {
             return await ExecuteOperation(async () =>
             {
-                var user = await _genericDataAccessObject.GetAsync<User>(uuid);
+                User? user = await _genericDataAccessObject.GetAsync<User>(uuid);
 
                 if (user == null)
                 {
                     throw new Exception("user does not exist");
                 }
-                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
+                if (!EmailUtils.IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty() || record.Password!.Length < 8 )
                 {
                     throw new Exception();
                 }
@@ -48,7 +66,7 @@ namespace Business.BusinessObjects
                     user.Password = record.Password;
                     user.Email = record.Email;
                     user.Picture = record.Picture;
-                    user.Password = record.Password;
+                    user.Password = PasswordUtils.EncodePasswordToBase64(record.Password!);
                     user.Phone = record.Phone;
                     user.Role = record.Role;
                 }
@@ -56,7 +74,7 @@ namespace Business.BusinessObjects
             });
         }
 
-        public async Task<OperationResult<List<User>>> ListFilteredUsers(string search, int sort)
+        public async Task<OperationResult<List<UserBusinessModel>>> ListFilteredUsers(string search, int sort)
         {
             return await ExecuteOperation(async () => {
 
@@ -64,7 +82,10 @@ namespace Business.BusinessObjects
                 {
                     throw new Exception();
                 }
-                List<User> result =await _userDataAccessObject.FilterUsers(search,sort);
+
+                List<User> users =await _userDataAccessObject.FilterUsers(search,sort);
+                List<UserBusinessModel> result = users.Select(u => new UserBusinessModel(u)).ToList();
+
                 return result;
 
             });
@@ -73,81 +94,140 @@ namespace Business.BusinessObjects
         {
             return await ExecuteOperation(async () =>
             {
-                if (!IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
+
+                if (!EmailUtils.IsValidEmail(record.Email!) || record.Name.IsNullOrEmpty() || record.Picture.IsNullOrEmpty() || record.Phone.IsNullOrEmpty())
                 {
                     throw new Exception();
                 }
-                string password = GenerateRandomPassword();
-                record.Password = password;
-                sendEmail(record.Email!, password);
 
+                User result = await _userDataAccessObject.GetUserByEmail(record.Email!);
+                if (result != null)
+                {
+                   throw new Exception("Email already exists");
+                }
+
+                string password = PasswordUtils.GenerateRandomPassword();
+                string subject = "Password";
+                
+                EmailUtils emailUtils = new EmailUtils();
+                emailUtils.sendEmail(record.Email!,subject, password);
+
+                record.Password = PasswordUtils.EncodePasswordToBase64(password);
                 await _genericDataAccessObject.InsertAsync<User>(record);
                 return new CreateUserBusinessModel { Uuid = record.Uuid};
             });
         }
 
-        private string GenerateRandomPassword(int length = 12)
+        public async Task<OperationResult<LoginBusinessModel>> Login(string email, string password)
         {
-            string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
-            string uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string digits = "0123456789";
-            string specialCharacters = "!@#$%^&*()_-+=<>?/\\";
-
-            string allCharacters = lowercaseLetters + uppercaseLetters + digits + specialCharacters;
-
-            length = Math.Max(length, 8);
-
-            Random random = new Random();
-            StringBuilder passwordBuilder = new StringBuilder();
-            for (int i = 0; i < length; i++)
+            return await ExecuteOperation(async () =>
             {
-                int index = random.Next(allCharacters.Length);
-                passwordBuilder.Append(allCharacters[index]);
-            }
+                if (!EmailUtils.IsValidEmail(email))
+                {
+                    throw new Exception("Invalid email");
+                }
 
-            return passwordBuilder.ToString();
+                User result = await _userDataAccessObject.GetUserByEmail(email);
+                if (result == null)
+                {
+                    throw new Exception("No email found");
+                }
+                if (PasswordUtils.DecodeFrom64(result.Password!) != password)
+                {
+                    throw new Exception("Invalid password");
+                }
+                string token = TokenUtils.CreateAuthenticationToken(result);
+
+                UserTokenAuthentication userToken = await _userDataAccessObject.GetUserTokenByUserId(result.Id);
+
+                if(userToken == null)
+                {
+                    userToken = new UserTokenAuthentication
+                    {
+                        UserId = result.Id,
+                        Token = token,
+                        IsValid = true
+                    };
+                }
+                else
+                {
+                    userToken.Token = token;
+                    userToken.IsValid = true;
+                }
+
+                await _genericDataAccessObject.UpdateAsync<UserTokenAuthentication>(userToken);
+
+                return new LoginBusinessModel { Token = token, User = new UserBusinessModel {
+                    Email=result.Email, Name=result.Name, Picture=result.Picture, Uuid=result.Uuid
+                    } 
+                };
+            });
         }
 
-        private void sendEmail(string email, string password)
+        public async Task<OperationResult> Logout(string token)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            var smtpServer = configuration["SmtpConfig:SmtpServer"];
-            var smtpPortString = configuration["SmtpConfig:SmtpPort"];
-            var smtpUsername = configuration["SmtpConfig:SmtpUsername"];
-            var smtpPassword = configuration["SmtpConfig:SmtpPassword"];
-            int smtpPort = int.Parse(smtpPortString);
-
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("unoonboarding@sapo.pt");
-            mail.To.Add(email);
-            mail.Subject = "User password";
-            mail.Body = "Your password is " + password;
-
-            SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort);
-            smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
-            smtpClient.EnableSsl = true;
-
-            try
+            return await ExecuteOperation(async () =>
             {
-                smtpClient.Send(mail);
-                Console.WriteLine("Email sent successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error sending email: " + ex.Message);
-            }
-        }
-        static bool IsValidEmail(string email)
-        {
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            Regex regex = new Regex(pattern);
+                UserTokenAuthentication result = await _userDataAccessObject.GetToken(token);
+                if (result == null)
+                {
+                    throw new Exception("Failed to logout");
+                }
+                result!.IsValid = false;
+                await _genericDataAccessObject.UpdateAsync(result);
 
-            return regex.IsMatch(email);
+            });
         }
 
+        public async Task<OperationResult> RecoverPassword(string email)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                User user = await _userDataAccessObject.GetUserByEmail(email);
+
+                if (user == null)
+                {
+                    throw new Exception("User doesnt exist");
+                }
+                else
+                {
+                    string resetToken = TokenUtils.GeneratePasswordResetToken();
+
+                    user.PasswordResetToken = resetToken;
+                    user.PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1); 
+
+                    await _genericDataAccessObject.UpdateAsync(user);
+
+                    EmailUtils emailUtils = new EmailUtils();
+                    string subject = "Password Reset Token";
+                    emailUtils.sendEmail(email!, subject, resetToken);
+                }
+            });
+        } 
+
+        public async Task<OperationResult> ResetPassword(string passwordResetToken, string newPassword)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                User user = await _userDataAccessObject.GetUserByPasswordResetToken(passwordResetToken);
+
+                if (user == null)
+                {
+                    throw new Exception("Invalid token");
+                }
+                if (DateTime.UtcNow > user.PasswordResetTokenExpiration)
+                {
+                    throw new Exception("Token expired");
+                }
+                string userPassword= PasswordUtils.DecodeFrom64(user.Password!);
+                if (string.IsNullOrEmpty(newPassword) || newPassword == userPassword) {
+                    throw new Exception("Please insert a valid password");
+                }
+
+                user.Password = PasswordUtils.EncodePasswordToBase64(newPassword);
+                user.PasswordResetTokenExpiration = DateTime.UtcNow;
+                await _genericDataAccessObject.UpdateAsync(user);
+            });
+        }
     }
 }

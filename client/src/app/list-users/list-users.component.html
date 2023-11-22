@@ -1,0 +1,14 @@
+<div class="app-user">
+  <h2>Users</h2>
+  <div class="search-sort-container">
+      <input [(ngModel)]="searchQuery" (input)="getFilteredUsers()" placeholder="Search users">
+      <input [(ngModel)]="sortValue" (change)="getFilteredUsers()" placeholder="Sort users">
+  </div>
+  <button (click)="navigateToInsertPage()" class="insert-button" >Insert User</button>
+  <ul class="app-user">
+      <li *ngFor="let user of filteredUsers">
+          {{ user.name }} - {{ user.email }}
+          <button (click)="navigateToEditPage(user.uuid)">Edit user</button>
+      </li>
+  </ul>
+</div>

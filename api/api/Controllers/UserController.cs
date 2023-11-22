@@ -1,11 +1,15 @@
 ﻿using api.Requests;
 using Business.Base;
+using Business.BusinessModels;
 using Business.Interfaces;
 using Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
+    [Route("User")]
+
     public class UserController : Controller
     {
         private readonly IGenericBusinessObject _genericBusinessObject;
@@ -17,16 +21,17 @@ namespace api.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult<List<User>>> GetUsers()
+        public async Task<ActionResult<List<UserBusinessModel>>> GetUsers()
         {
-            List<User> result = await _genericBusinessObject.ListAsync<User>();
-            return result;
+            var result = await _userBusinessObject.GetUsers();
+            return Ok(result);
         }
 
         [HttpGet("get/{uuid}")]
         public async Task<ActionResult<User>> GetUserByUuid(Guid uuid)
         {
-            return await _genericBusinessObject.GetAsync<User>(uuid);
+            User? result = await _genericBusinessObject.GetAsync<User>(uuid);
+            return Ok(result!);
         }
 
         [HttpDelete("delete/{uuid}")]
@@ -46,7 +51,7 @@ namespace api.Controllers
             }
             return Ok(result);
         }
-        [HttpPut("update")]
+        [HttpPut("update/{uuid}")]
         public async Task<ActionResult> Update(Guid uuid, [FromBody] UpdateUserRequest user)
         {
             OperationResult result = await _userBusinessObject.Update(uuid, user.ToUser());
@@ -65,6 +70,50 @@ namespace api.Controllers
                 return StatusCode(400);
             }
             return Ok(result);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginRequest login)
+        {
+            OperationResult result = await _userBusinessObject.Login(login.Email!,login.Password!);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("recoverPassword")]
+        public async Task<ActionResult> RecoverPassword(string email)
+        {
+            OperationResult result = await _userBusinessObject.RecoverPassword(email);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<ActionResult> ResetPassword(string passwordResetToken, string newPassword)
+        {
+            OperationResult result = await _userBusinessObject.ResetPassword(passwordResetToken,newPassword);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("logout"), Authorize]
+        public async Task<ActionResult> Logout(string token)
+        {
+            OperationResult result = await _userBusinessObject.Logout(token);
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return StatusCode(200);
         }
     }   
 }
