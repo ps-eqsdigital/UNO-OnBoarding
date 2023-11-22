@@ -65,5 +65,40 @@ namespace api.Controllers
             }
             return StatusCode(200);
         }
+
+        [HttpGet("readData")]
+        public async Task<ActionResult> ReadSensorData(Guid sensorUuid, DateTime dateFrom, DateTime dateTo)
+        {
+            OperationResult result = await _sensorBusinessObject.ReadData(sensorUuid, dateFrom, dateTo);
+
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("checkOrUncheckSensorAsFavorite"), Authorize]
+        public async Task<ActionResult> CheckOrUncheckSensorAsFavorite([FromBody] MarkFavSensorRequest markFavSensorRequest)
+        {
+            OperationResult result = await _sensorBusinessObject.MarkOrDemarkSensorAsFavorite(markFavSensorRequest.SensorUuid, markFavSensorRequest.Favorite);
+
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("listFavoriteSensors"), Authorize]
+        public async Task<ActionResult<List<SensorBusinessModel>>> ListFavoriteSensors()
+        {
+            OperationResult result = await _sensorBusinessObject.ListFavoriteSensors();
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
     }
 }
