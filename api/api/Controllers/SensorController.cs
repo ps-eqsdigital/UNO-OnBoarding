@@ -66,7 +66,7 @@ namespace api.Controllers
             return StatusCode(200);
         }
 
-        [HttpGet("readData")]
+        [HttpGet("readData"), Authorize]
         public async Task<ActionResult> ReadSensorData(Guid sensorUuid, DateTime dateFrom, DateTime dateTo)
         {
             OperationResult result = await _sensorBusinessObject.ReadData(sensorUuid, dateFrom, dateTo);

@@ -26,7 +26,7 @@ namespace DataAccess.DataAccessObjects
             return result.Where(x => !x.IsDeleted).ToList()!;
         }
 
-        public async Task<List<SensorData>> ReadData(Guid sensorUuid, DateTime from, DateTime to)
+        public async Task<List<SensorData>> ReadData(long userId, Guid sensorUuid, DateTime from, DateTime to)
         {
             List<SensorData> result = await _context.Set<Sensor>()
                 .Where(s => s.Uuid == sensorUuid)
@@ -34,7 +34,7 @@ namespace DataAccess.DataAccessObjects
                     _context.Set<SensorData>(),
                     sensor => sensor.Id,
                     sensorData => sensorData.SensorId,
-                    (sensor,sensorData) => new {SensorData = sensorData }
+                    (sensor,sensorData) => new {Sensor = sensor ,SensorData = sensorData }
                 )
                 .Where(joined => joined.SensorData.TimeStamp>= from && joined.SensorData.TimeStamp <= to)
                 .Select(joined => joined.SensorData)
@@ -80,6 +80,7 @@ namespace DataAccess.DataAccessObjects
                    sensor => sensor.Id,
                    (userFavoriteSensor,sensor) => new {Sensor = sensor}
                ).
+               Where(joined => joined.Sensor.IsPublic || joined.Sensor.UserId == userId).
                Select(joined => joined.Sensor)
                .ToListAsync();
 

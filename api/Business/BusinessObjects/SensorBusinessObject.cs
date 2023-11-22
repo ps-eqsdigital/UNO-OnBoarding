@@ -117,19 +117,18 @@ namespace Business.BusinessObjects
                 }
 
                 Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(sensorUuid);
-
-                
+          
                 if (sensor == null)
                 {
                     throw new Exception("sensor does not exist");
                 }
 
-                if (sensor.UserId != currentUserId)
+                if (!sensor.IsPublic && currentUserId != sensor.UserId)
                 {
-                    throw new Exception("Access denied");
+                    throw new Exception("Sensor is not accessible");
                 }
 
-                List<SensorData> result = await _sensorDataAccessObject.ReadData(sensorUuid, from, to);
+                List<SensorData> result = await _sensorDataAccessObject.ReadData(currentUserId, sensorUuid, from, to);
                 List<List<object>> sensorData = new List<List<object>>();
 
                 foreach (SensorData data in result)

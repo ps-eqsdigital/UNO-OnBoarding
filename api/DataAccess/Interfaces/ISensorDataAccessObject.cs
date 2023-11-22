@@ -10,7 +10,7 @@ namespace DataAccess.Interfaces
     public interface ISensorDataAccessObject
     {
         public Task<List<Sensor>> ListSensors(long userId);
-        public Task<List<SensorData>> ReadData(Guid sensorUuid, DateTime from, DateTime to);
+        public Task<List<SensorData>> ReadData(long userId, Guid sensorUuid, DateTime from, DateTime to);
         public Task MarkSensorAsFavorite(long userId, long sensorId);
         public Task DemarkSensorAsFavorite(long userId, long sensorId);
         public Task<bool> CheckIfSensorIsFavorite(long userId, long sensorId);
