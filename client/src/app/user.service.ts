@@ -83,11 +83,11 @@ export class UserService {
     };
 
     return this.http.post<any>(environment.apiUrl+"/User/resetPassword/",requestBody, this.httpOptions)
-    .pipe(
-      map((response:any)=>{
-        return response
-      }),
-      catchError(this.handleError<any>('resetPassword', []))
+      .pipe(
+        map((response:any)=>{
+          return response
+        }),
+        catchError(this.handleError<any>('resetPassword', []))
     );
   }
 
