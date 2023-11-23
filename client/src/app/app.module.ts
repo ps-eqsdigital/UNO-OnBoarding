@@ -22,6 +22,7 @@ import { LoginComponent } from './login/login.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 
 import { MatInputModule } from '@angular/material/input';
+import { UnoChartComponent } from './uno-chart/uno-chart.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import { MatInputModule } from '@angular/material/input';
     EditUserComponent,
     LoginComponent,
     SidebarComponent
+    EditUserComponent,
+    UnoChartComponent
   ],
   imports: [
     BrowserModule,

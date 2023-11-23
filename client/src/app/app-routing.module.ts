@@ -5,6 +5,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { InsertUserComponent } from './insert-user/insert-user.component';
 import { ButtonComponent } from './button/button.component';
 import { AppComponent } from './app.component';
+import { UnoChartComponent } from './uno-chart/uno-chart.component';
 
 const routes: Routes = [
   {path : '', component: AppComponent},
