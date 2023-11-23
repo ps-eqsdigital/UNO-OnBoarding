@@ -84,7 +84,7 @@ namespace Business.BusinessObjects
                     throw new Exception("Sensor doesn't exist");
                 }
                 
-                long sensorId=sensor.Id;
+                long sensorId = sensor.Id;
 
                 if (currentUser == null)
                 {
