@@ -115,5 +115,5 @@ app.UseMiddleware<TokenValidationMiddleware>();
 app.UseCors(myAllowSpecificOrigins);
 
 app.MapControllers();
-
+app.UseCors(myAllowSpecificOrigins);
 app.Run();

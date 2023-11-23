@@ -73,9 +73,9 @@ namespace api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(string email, string password)
+        public async Task<ActionResult> Login([FromBody] LoginRequest login)
         {
-            OperationResult result = await _userBusinessObject.Login(email, password);
+            OperationResult result = await _userBusinessObject.Login(login.Email!,login.Password!);
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
