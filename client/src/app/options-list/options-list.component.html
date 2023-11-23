@@ -1,0 +1,9 @@
+<h4>Basic mat-select</h4>
+<mat-form-field class="form">
+  <select class="select">
+    <option class="placeholder" label={{placeholder}} disabled selected></option>
+    <option class='option' *ngFor="let data of data" [value]="data">
+      {{data}}
+    </option>
+  </select>
+</mat-form-field>
