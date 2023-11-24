@@ -16,7 +16,7 @@ namespace api.Requests
 
         public User ToUser()
         {
-            return new User { Name = this.Name, Email = this.Email, Picture = this.Picture, Role = this.Role, Uuid = Guid.NewGuid(), Phone = this.Phone, Password= this.Password };
+            return new User { Name = this.Name, Email = this.Email, Picture = this.Picture, Role = this.Role, Phone = this.Phone, Password= this.Password };
         }
     }
 }

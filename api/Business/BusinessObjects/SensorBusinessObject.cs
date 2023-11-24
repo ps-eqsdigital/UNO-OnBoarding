@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Business.BusinessModels;
 using Business.Interfaces;
 using Data.Entities;
 using DataAccess.Interfaces;
@@ -19,11 +20,14 @@ namespace Business.BusinessObjects
         private readonly IGenericDataAccessObject _genericDataAccessObject;
         private readonly IUserDataAccessObject _userDataAccessObject;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public SensorBusinessObject(IGenericDataAccessObject genericDataAccessObject, IUserDataAccessObject userDataAccessObject, IHttpContextAccessor httpContextAccessor)
+        private readonly ISensorDataAccessObject _sensorDataAccessObject;
+
+        public SensorBusinessObject(IGenericDataAccessObject genericDataAccessObject, IUserDataAccessObject userDataAccessObject, IHttpContextAccessor httpContextAccessor, ISensorDataAccessObject sensorDataAccessObject)
         {
             _genericDataAccessObject = genericDataAccessObject;
             _userDataAccessObject = userDataAccessObject;
             _httpContextAccessor = httpContextAccessor;
+            _sensorDataAccessObject = sensorDataAccessObject;
         }
 
         public async Task<OperationResult> CreateSensor(Sensor record)
@@ -44,6 +48,61 @@ namespace Business.BusinessObjects
                 long currentUserId = long.Parse(currentUser);
                 record.UserId = currentUserId;
                 await _genericDataAccessObject.InsertAsync<Sensor>(record);
+            });
+        }
+
+        public async Task<OperationResult<List<SensorBusinessModel>>> ListSensors()
+        {
+            return await ExecuteOperation(async () =>
+            {
+                string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                long currentUserId = long.Parse(currentUser);
+
+                if (currentUser == null)
+                {
+                    throw new Exception("Session expired");
+                }
+
+                List<Sensor> sensors = await _sensorDataAccessObject.ListSensors(currentUserId);
+                List<SensorBusinessModel> result = sensors != null
+                    ? sensors.Select(s => new SensorBusinessModel(s)).ToList()
+                    : new List<SensorBusinessModel>();
+
+                return result;
+            });
+        }
+
+        public async Task<OperationResult> AddData(List<SensorData> sensorData, Guid sensorUuid)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                long currentUserId = long.Parse(currentUser);
+
+                Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(sensorUuid);
+
+                if (sensor == null)
+                {
+                    throw new Exception("Sensor doesn't exist");
+                }
+                
+                long sensorId=sensor.Id;
+
+                if (currentUser == null)
+                {
+                    throw new Exception("Session expired");
+                }
+
+                if (currentUserId != sensor.UserId)
+                {
+                    throw new Exception("Unauthorized");
+                }
+
+                foreach(SensorData data in sensorData)
+                {
+                    data.SensorId= sensorId;
+                    await _genericDataAccessObject.InsertAsync(data);
+                }
             });
         }
 

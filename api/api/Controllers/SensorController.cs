@@ -1,10 +1,12 @@
 ﻿using api.Requests;
 using Business.Base;
+using Business.BusinessModels;
 using Business.BusinessObjects;
 using Business.Interfaces;
 using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace api.Controllers
 {
@@ -35,6 +37,28 @@ namespace api.Controllers
         public async Task<ActionResult> Update(Guid uuid, [FromBody] SensorRequest sensor)
         {
             OperationResult result = await _sensorBusinessObject.EditSensor(uuid, sensor.ToSensor());
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return StatusCode(200);
+        }
+
+        [HttpGet("listSensors"), Authorize]
+        public async Task<ActionResult<List<SensorBusinessModel>>> ListSensors()
+        {
+            OperationResult result = await _sensorBusinessObject.ListSensors();
+            if (result.Exception is Exception)
+            {
+                return StatusCode(400);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("addSensorData"), Authorize]
+        public async Task<ActionResult> AddSensorData([FromBody] SensorDataRequest sensorDataRequest)
+        {
+            OperationResult result = await _sensorBusinessObject.AddData(sensorDataRequest.ToSensorData(), sensorDataRequest.SensorUuid);
             if (result.Exception is Exception)
             {
                 return StatusCode(400);
