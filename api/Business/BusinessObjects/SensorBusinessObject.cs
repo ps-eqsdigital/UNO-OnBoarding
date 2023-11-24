@@ -131,9 +131,7 @@ namespace Business.BusinessObjects
                 }
 
                 List<SensorData> result = await _sensorDataAccessObject.ReadData(currentUserId, sensorUuid, from, to);
-                List<List<object>> sensorData = new List<List<object>>();
-
-                foreach (SensorData data in result)
+                List<List<object>> sensorData = result.Select(data =>
                 {
                     ReadDataBusinessModel dataModel = new ReadDataBusinessModel()
                     {
@@ -141,13 +139,13 @@ namespace Business.BusinessObjects
                         Value = data.Value,
                     };
 
-                    List<object> sD = new List<object>()
+                    return new List<object>()
                     {
                         dataModel.TimeStamp!,
                         dataModel.Value!
                     };
-                    sensorData.Add(sD);
-                }
+                }).ToList();
+
                 return sensorData;
             });
         }
