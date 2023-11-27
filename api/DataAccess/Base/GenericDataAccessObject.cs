@@ -30,6 +30,13 @@ namespace DataAccess.Base
                 
         }
 
+        public async Task<T?> GetById<T>(long id) where T : Entity
+        {
+            var result = await _context.Set<T>().Where(x => x.Id == id)
+                .ToListAsync();
+
+            return result.Where(x => !x.IsDeleted).SingleOrDefault();
+        }
         public async Task InsertAsync<T>(T record) where T : Entity
         {
             record.CreatedAt = DateTime.UtcNow;

@@ -16,6 +16,10 @@ namespace Business.Interfaces
         public Task<OperationResult> EditSensor(Guid uuid, Sensor record);
         public Task<OperationResult<List<SensorBusinessModel>>> ListSensors();
         public Task<OperationResult> AddData(List<SensorData> sensorData, Guid sensorUuid);
+        public Task<OperationResult<List<List<object>>>> ReadData(Guid sensorUuid, DateTime from, DateTime to);
+        public Task<OperationResult> MarkOrDemarkSensorAsFavorite(Guid sensorUuid, bool favorite);
+        public Task<OperationResult<List<SensorBusinessModel>>> ListFavoriteSensors();
+
 
     }
 }

@@ -64,10 +64,11 @@ namespace Business.BusinessObjects
                 }
 
                 List<Sensor> sensors = await _sensorDataAccessObject.ListSensors(currentUserId);
-                List<SensorBusinessModel> result = sensors != null
-                    ? sensors.Select(s => new SensorBusinessModel(s)).ToList()
-                    : new List<SensorBusinessModel>();
+                List<SensorBusinessModel> result = sensors.Select(s => new SensorBusinessModel(s)).ToList();
 
+                List<SensorBusinessModel> result = sensors != null ?
+                sensors.Select(s => new SensorBusinessModel(s)).ToList()
+                : new List<SensorBusinessModel>();
                 return result;
             });
         }
@@ -86,7 +87,7 @@ namespace Business.BusinessObjects
                     throw new Exception("Sensor doesn't exist");
                 }
                 
-                long sensorId=sensor.Id;
+                long sensorId = sensor.Id;
 
                 if (currentUser == null)
                 {
@@ -106,11 +107,115 @@ namespace Business.BusinessObjects
             });
         }
 
-        public async Task<OperationResult> EditSensor(Guid uuid, Sensor record)
+        public async Task<OperationResult<List<List<object>>>> ReadData(Guid sensorUuid, DateTime from, DateTime to)
+        {
+            return await ExecuteOperation(async () =>
+            {
+                string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                long currentUserId = long.Parse(currentUser);
+
+                if (currentUser == null)
+                {
+                    throw new Exception("Session expired");
+                }
+
+                Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(sensorUuid);
+          
+                if (sensor == null)
+                {
+                    throw new Exception("sensor does not exist");
+                }
+
+                if (!sensor.IsPublic && currentUserId != sensor.UserId)
+                {
+                    throw new Exception("Sensor is not accessible");
+                }
+
+                List<SensorData> result = await _sensorDataAccessObject.ReadData(currentUserId, sensorUuid, from, to);
+                List<List<object>> sensorData = result.Select(data =>
+                {
+                    ReadDataBusinessModel dataModel = new ReadDataBusinessModel()
+                    {
+                        TimeStamp = data.TimeStamp,
+                        Value = data.Value,
+                    };
+
+                    return new List<object>()
+                    {
+                        dataModel.TimeStamp!,
+                        dataModel.Value!
+                    };
+                }).ToList();
+
+                return sensorData;
+            });
+        }
+         
+        public async Task<OperationResult> MarkOrDemarkSensorAsFavorite(Guid sensorUuid, bool favorite)
         {
             return await ExecuteOperation(async () =>
             {
 
+                string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                long currentUserId = long.Parse(currentUser);
+
+                if (currentUser == null)
+                {
+                    throw new Exception("Session expired");
+                }
+
+                Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(sensorUuid);
+
+                if (sensor == null)
+                {
+                    throw new Exception("Invalid sensor");
+                }
+
+                if (!sensor.IsPublic && currentUserId != sensor.UserId)
+                {
+                    throw new Exception("Sensor is not accessible");
+                }
+
+                bool isFavoriteSensor = await _sensorDataAccessObject.CheckIfSensorIsFavorite(currentUserId, sensor.Id);
+
+                if (favorite)
+                {
+                    await _sensorDataAccessObject.MarkSensorAsFavorite(currentUserId, sensor.Id);
+                }
+                else
+                {
+                    if (isFavoriteSensor)
+                    {
+                        await _sensorDataAccessObject.DemarkSensorAsFavorite(currentUserId, sensor.Id);
+                    }
+                }
+            });
+        }
+
+        public async Task<OperationResult<List<SensorBusinessModel>>> ListFavoriteSensors()
+        {
+            return await ExecuteOperation(async () =>
+            {
+                string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                long currentUserId = long.Parse(currentUser);
+
+                if (currentUser == null)
+                {
+                    throw new Exception("Session expired");
+                }
+
+                List<Sensor> sensors = await _sensorDataAccessObject.ListFavoriteSensors(currentUserId);
+                List<SensorBusinessModel> result = sensors.Select(s => new SensorBusinessModel(s)).ToList();
+
+                return result;
+
+            });
+        }
+
+        public async Task<OperationResult> EditSensor(Guid uuid, Sensor record)
+        {
+            return await ExecuteOperation(async () =>
+            {
                 Sensor? sensor = await _genericDataAccessObject.GetAsync<Sensor>(uuid);
                 string currentUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
                 long currentUserId= long.Parse(currentUser);

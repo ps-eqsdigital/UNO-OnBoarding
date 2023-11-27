@@ -17,5 +17,6 @@ namespace Data.Entities
         public string? PasswordResetToken { get; set; }
         public DateTime PasswordResetTokenExpiration { get; set; }
         public Role Role { get; set; }
+        public virtual ICollection<UserFavoriteSensor>? FavoriteSensors { get; set; }
     }
 }

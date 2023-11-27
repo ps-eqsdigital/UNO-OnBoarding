@@ -19,5 +19,7 @@ namespace Data.Entities
         public string? Category { get; set; }
         public string? Color { get; set; }
         public ICollection<SensorData>? SensorDatas { get; set; }
-    }   
+        public virtual ICollection<UserFavoriteSensor>? FavoriteSensors { get; set; }
+
+    }
 }

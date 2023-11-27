@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using api.Middleware;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.AddScoped<IApiBusinessObject, ApiBusinessObject>();
 builder.Services.AddScoped<IUserDataAccessObject, UserDataAccessObject>();
 builder.Services.AddScoped<ISensorBusinessObject, SensorBusinessObject>();
 builder.Services.AddScoped<ISensorDataAccessObject, SensorDataAccessObject>();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddApiVersioning(options =>
 {

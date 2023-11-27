@@ -9,6 +9,7 @@ namespace Business.BusinessModels
 {
     public class SensorBusinessModel
     {
+        public Guid Uuid { get; set; }
         public long UserId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -17,6 +18,7 @@ namespace Business.BusinessModels
         public string? Color { get; set; }
 
         public SensorBusinessModel(Sensor sensor) {
+            Uuid = sensor.Uuid;
             UserId = sensor.UserId;
             Name = sensor.Name;
             Description = sensor.Description;

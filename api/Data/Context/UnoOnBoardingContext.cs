@@ -18,6 +18,7 @@ namespace Data.Context
         public DbSet<SensorData>? SensorsData { get; set; }
 
         public DbSet<User>? Users { get; set; }
+        public DbSet<UserFavoriteSensor>? UsersFavoriteSensors { get; set; }
         public DbSet<UserTokenAuthentication>? UserTokenAuthentication { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

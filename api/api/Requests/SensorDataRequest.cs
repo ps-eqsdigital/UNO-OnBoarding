@@ -21,12 +21,12 @@ namespace api.Requests
                 {
                     if (dataPoint.Count >= 2 && dataPoint[0].ValueKind == JsonValueKind.String && dataPoint[1].ValueKind == JsonValueKind.Number)
                     {
-                        var timestampString = dataPoint[0].GetString();
-                        var value = dataPoint[1].GetDouble();
+                        string timestampString = dataPoint[0].GetString()!;
+                        double value = dataPoint[1].GetDouble();
 
                         if (DateTime.TryParse(timestampString, null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime timestamp))
                         {
-                            var sensorData = new SensorData()
+                            SensorData sensorData = new SensorData()
                             {
                                 Uuid = Guid.NewGuid(),
                                 TimeStamp = timestamp,
