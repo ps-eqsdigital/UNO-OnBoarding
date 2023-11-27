@@ -64,6 +64,7 @@ namespace Business.BusinessObjects
                 }
 
                 List<Sensor> sensors = await _sensorDataAccessObject.ListSensors(currentUserId);
+                List<SensorBusinessModel> result = sensors.Select(s => new SensorBusinessModel(s)).ToList();
 
                 List<SensorBusinessModel> result = sensors != null ?
                 sensors.Select(s => new SensorBusinessModel(s)).ToList()

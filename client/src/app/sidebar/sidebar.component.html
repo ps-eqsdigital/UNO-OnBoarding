@@ -1,0 +1,36 @@
+<div class="sidebar" [class.closed]="!isSidebarOpen">
+  <button id="toggleSidebar" (click)="toggleSidebar()" *ngIf="isMobileSize">
+    <div class="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </button> 
+  <div class="top-section">
+    <h2 *ngIf="isMobileSize">Olá</h2>
+    <h2 *ngIf="!isMobileSize">UNO</h2>
+  </div>
+  <ul class="menu">
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Home)" [class.selected]="selectedItem === selectableItems.Home">Home</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Dashboards)" [class.selected]="selectedItem === selectableItems.Dashboards">Dashboards</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Sensors)" [class.selected]="selectedItem === selectableItems.Sensors">Sensors</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Users)" [class.selected]="selectedItem === selectableItems.Users">Users</a>
+    </li>
+  </ul>
+  <ul class="menu">
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Settings)" [class.selected]="selectedItem === selectableItems.Settings">Settings</a>
+    </li>
+    <li>
+      <a href="#" (click)="selectItem(selectableItems.Logout)" [class.selected]="selectedItem === selectableItems.Logout">Logout</a>
+    </li>
+  </ul>
+</div>
+
